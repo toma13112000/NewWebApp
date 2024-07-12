@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JOLTAP - Выгодно для каждого!</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/5.0.0-beta2/css/bootstrap.min.css">
+    <link rel="icon" href="/images/logo Joltap.png" type="image/png">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            width: 100%;
+            max-width: 100%;
+            background-color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        header img.logo {
+            width: 100px;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav li {
+            margin: 0 20px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #333;
+            font-size: 16px;
+            font-weight: 400;
+            cursor: pointer;
+        }
+
+        nav a.active {
+            font-weight: 700;
+            border-bottom: 2px solid #f36706;
+        }
+
+        .main {
+            background-color: #f36706;
+            color: #fff;
+            width: 80%;
+            max-width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 40px;
+            border-radius: 10px;
+            margin: 20px 0;
+            box-sizing: border-box;
+        }
+
+        .hero-text {
+            max-width: 600px;
+        }
+
+        .hero h1 {
+            font-size: 36px;
+            margin: 0 0 20px 0;
+        }
+
+        .hero p {
+            font-size: 20px;
+            margin: 0 0 20px 0;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+        }
+
+        .hero-buttons button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .hero-buttons .primary {
+            background-color: #fff;
+            color: #f36706;
+            font-weight: 700;
+        }
+
+        .hero-buttons .secondary {
+            background-color: transparent;
+            color: #fff;
+            border: 2px solid #fff;
+        }
+
+        .hero img {
+            max-width: 400px;
+            border-radius: 10px;
+        }
+
+        .sections {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .section {
+            width: 48%;
+        }
+
+        .section h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .cards {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .card {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            flex: 1 1 calc(33.333% - 40px);
+            box-sizing: border-box;
+        }
+
+        .card h3 {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .card .badge {
+            background-color: #f36706;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .cta-buttons button {
+            padding: 10px 20px;
+            background-color: #f36706;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        /* Модальное окно */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+            padding-top: 60px;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 10px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .phone {
+            display: flex;
+            align-items: center;
+        }
+
+        .phone a {
+            text-decoration: none;
+            color: #fff;
+            background-color: #f36706;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 400;
+            display: flex;
+            align-items: center;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+<body>
+<header>
+    <div class="logo">
+        <img src="/images/logo Joltap.png" alt="JOLTAP Logo">
+    </div>
+    <nav>
+        <ul>
+            <li><a href="#employers" class="active" onclick="showSection('employers')">Для заказчиков</a></li>
+            <li><a href="#graduates" onclick="showSection('graduates')">Для выпускников</a></li>
+            <li><a href="#qa" onclick="showSection('qa')">Вопрос-ответ</a></li>
+            <li><a href="#feedback" id="feedback-link">Оставить отзыв</a></li>
+        </ul>
+    </nav>
+    <div class="phone">
+        <a href="tel:+77072213131" class="phone">
+            <span class="fa fa-phone"></span> +7 707 221-31-31
+        </a>
+    </div>
+    <a href="#" class="login" id="login-link">Вход</a>
+</header>
+<div class="main hidden" id="employers">
+    <form id="employers-form">
+        <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+            <ol class="carousel-indicators">
+                <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"></li>
+                <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"></li>
+                <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"></li>
+            </ol>
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <div class="hero-text">
+                        <h1>Выгодно для каждого!</h1>
+                        <p>Бесплатное размещение вакансий и заказов. Более 3 тыс. сертифицированных выпускников проекта. Без комиссий.</p>
+                        <div class="hero-buttons">
+                            <button class="primary">Разместить объявление</button>
+                            <button class="secondary">Найти работу или заказ</button>
+                        </div>
+                    </div>
+                    <img src="/images/Furniture%20maker.png" alt="JOLTAP" class="d-block w-100">
+                </div>
+                <div class="carousel-item">
+                    <div class="hero-text">
+                        <h1>Для выпускников</h1>
+                        <p>Здесь можно найти работу или заказ. Подайте заявку и станьте частью нашей команды.</p>
+                        <div class="hero-buttons">
+                            <button class="primary">Подать заявку</button>
+                        </div>
+                    </div>
+                    <img src="/images/Graduates.png" alt="Graduates" class="d-block w-100">
+                </div>
+                <div class="carousel-item">
+                    <div class="hero-text">
+                        <h1>Вопрос-ответ</h1>
+                        <p>Ответы на часто задаваемые вопросы. Если у вас есть вопрос, вы можете задать его здесь.</p>
+                        <div class="hero-buttons">
+                            <button class="primary">Задать вопрос</button>
+                        </div>
+                    </div>
+                    <img src="/images/QA.png" alt="QA" class="d-block w-100">
+                </div>
+            </div>
+            <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </a>
+        </div>
+    </form>
+</div>
+
+
+<div class="hero hidden" id="graduates">
+    <form id="graduates-form">
+        <div class="hero-text">
+            <h1>Для выпускников</h1>
+            <p>Здесь можно найти работу или заказ. Подайте заявку и станьте частью нашей команды.</p>
+            <div class="hero-buttons">
+                <button class="primary">Подать заявку</button>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="hero hidden" id="qa">
+    <form id="qa-form">
+        <div class="hero-text">
+            <h1>Вопрос-ответ</h1>
+            <p>Ответы на часто задаваемые вопросы. Если у вас есть вопрос, вы можете задать его здесь.</p>
+            <div class="hero-buttons">
+                <button class="primary">Задать вопрос</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- Модальное окно -->
+<div id="feedback-modal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Оставить отзыв</h2>
+        <textarea id="feedback-text" rows="10" style="width: 100%;"></textarea>
+        <div style="text-align: right; margin-top: 10px;">
+            <button id="send-feedback" style="padding: 10px 20px; background-color: #f36706; color: #fff; border: none; border-radius: 5px; cursor: pointer;">Отправить</button>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно для уведомления об авторизации -->
+<div id="auth-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-auth">&times;</span>
+        <h2>Необходима авторизация</h2>
+        <p>Пожалуйста, <a href="/login">войдите в систему</a> для продолжения.</p>
+    </div>
+</div>
+
+
+<section class="sections">
+    <div class="section" id="graduate-section">
+        <h2>Для выпускников</h2>
+        <div class="cards" id="graduate-cards">
+        </div>
+        <div class="cta-buttons">
+            <button class="cta-button" data-auth-required="true">Найти работу</button>
+        </div>
+    </div>
+    <div class="section" id="employer-section">
+        <h2>Для работодателей</h2>
+        <div class="cards" id="employee-cards">
+        </div>
+        <div class="cta-buttons">
+            <button class="cta-button" data-auth-required="true">Найти сотрудника</button>
+        </div>
+    </div>
+</section>
+<script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+<script>
+    (function() {
+        emailjs.init('IW0PJmYhI7bET28f8'); // Используйте ваш публичный ключ из EmailJS
+    })();
+</script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/5.0.0-beta2/js/bootstrap.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        function createCard(user) {
+            const roles = user.roles ? user.roles.map(role => role.name).join(', ') : 'No roles';
+            return `
+        <div class="card graduate-card" data-user-id="${user.id}">
+            <h3>${user.username}</h3>
+            <p>ID: ${user.id}</p>
+            <span class="badge">${roles}</span>
+        </div>
+    `;
+        }
+
+
+        function fetchData(apiEndpoint, containerId) {
+            fetch(apiEndpoint)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log(`Response from ${apiEndpoint}:`, data);  // Логирование текста ответа
+                    const container = document.getElementById(containerId);
+                    container.innerHTML = '';
+                    data.forEach(user => {
+                        container.innerHTML += createCard(user);
+                    });
+                    addCardClickHandlers();
+                })
+                .catch(error => {
+                    console.error(`Error fetching data from ${apiEndpoint}:`, error);
+                    document.getElementById('auth-modal').style.display = 'block';
+                });
+        }
+
+
+        function addCardClickHandlers() {
+            document.querySelectorAll('.graduate-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    window.location.href = `/profile/${this.getAttribute('data-user-id')}`;
+                });
+            });
+        }
+
+        function showForm(formId) {
+            document.querySelectorAll('.main').forEach(el => el.classList.add('hidden'));
+            document.querySelector(`#${formId}`).classList.remove('hidden');
+            document.querySelectorAll('nav a').forEach(el => {
+                el.classList.remove('active');
+                if (el.getAttribute('href') === `#${formId}`) {
+                    el.classList.add('active');
+                }
+            });
+        }
+
+        function isUserAuthenticated() {
+            const token = localStorage.getItem('jwtToken');
+            return !!token; // Преобразуем значение в булевый тип: true, если токен есть, иначе false
+            // Поменяйте эту логику на реальную проверку
+        }
+
+        // Подготовка форм и привязка обработчиков
+        showForm('employers');
+        document.querySelectorAll('nav a').forEach(a => {
+            a.addEventListener('click', function(e) {
+                e.preventDefault();
+                showForm(this.getAttribute('href').substring(1));
+            });
+        });
+
+        document.getElementById('feedback-link').addEventListener('click', function(event) {
+            event.preventDefault();
+            document.getElementById('feedback-modal').style.display = 'block';
+        });
+
+        document.querySelector('.close').addEventListener('click', function() {
+            document.getElementById('feedback-modal').style.display = 'none';
+        });
+
+        document.querySelector('.close-auth').addEventListener('click', function() {
+            document.getElementById('auth-modal').style.display = 'none';
+        });
+
+        window.onclick = function(event) {
+            if (event.target === document.getElementById('feedback-modal')) {
+                document.getElementById('feedback-modal').style.display = 'none';
+            }
+            if (event.target === document.getElementById('auth-modal')) {
+                document.getElementById('auth-modal').style.display = 'none';
+            }
+        };
+
+        document.querySelectorAll('.hero-buttons button, .cta-buttons button').forEach(button => {
+            button.addEventListener('click', function(event) {
+                if (!isUserAuthenticated()) {
+                    event.preventDefault();
+                    document.getElementById('auth-modal').style.display = 'block';
+                } else {
+                    // Действие, доступное только аутентифицированным пользователям
+                }
+            });
+        });
+
+        document.getElementById('send-feedback').addEventListener('click', function() {
+            var feedbackText = document.getElementById('feedback-text').value;
+            emailjs.send('service_jumystap_joltap', 'template_7h86dni', {
+                feedback: feedbackText,
+                to_email: 'janamumkindik@gmail.com'
+            })
+                .then(function(response) {
+                    Swal.fire({
+                        title: 'Успех!',
+                        text: 'Отзыв успешно отправлен!',
+                        icon: 'success',
+                        confirmButtonText: 'ОК'
+                    });
+                    document.getElementById('feedback-modal').style.display = 'none';
+                }, function(error) {
+                    Swal.fire({
+                        title: 'Ошибка!',
+                        text: 'Ошибка при отправке отзыва.',
+                        icon: 'error',
+                        confirmButtonText: 'ОК'
+                    });
+                });
+        });
+
+        // Загрузка данных
+        fetchData('/api/users/graduates', 'graduate-cards');
+        fetchData('/api/users/employers', 'employee-cards');
+    });
+
+</script>
+
+</body>
+</html>

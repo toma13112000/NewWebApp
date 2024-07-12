@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/images/logo Joltap.png" type="image/png">
+    <title>JOLTAP Подтверждение кода</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+        .header a {
+            text-decoration: none;
+            color: #000000;
+            margin-right: 20px;
+        }
+        .contact-button {
+            background-color: #ff7f00;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .main {
+            margin-top: 50px;
+        }
+        .form-container {
+            display: inline-block;
+            text-align: left;
+        }
+        .form-container input {
+            width: 300px;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #cccccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .form-container button {
+            width: 100%;
+            padding: 10px;
+            background-color: #cccccc;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .links {
+            margin-top: 20px;
+        }
+        .links a {
+            text-decoration: none;
+            color: #ff7f00;
+            margin: 0 5px;
+        }
+        .footer {
+            margin-top: 50px;
+            color: #cccccc;
+            font-size: 12px;
+        }
+        .footer a {
+            color: #cccccc;
+            text-decoration: none;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="logo">
+        <img src="/images/logo Joltap.png" alt="JOLTAP Logo">
+    </div>
+    <div>
+        <a href="/index">Вернуться на главную</a>
+        <a href="tel:+77072213131" class="phone">
+            <span class="fa fa-phone"></span> +7 707 221-31-31
+        </a>
+        <a href="/login">Вход</a>
+    </div>
+</div>
+
+<div class="main">
+    <h1>Подтверждение кода</h1>
+    <p>На номер <span id="phoneDisplay"></span> был отправлен код, введите его в поле ниже</p>
+    <div class="form-container">
+        <form id="step2-form" action="/confirm" method="POST">
+            <input type="text" id="code" name="code" placeholder="****"><br>
+            <button type="submit" id="confirm-button" disabled>ПОДТВЕРДИТЬ</button>
+            <p id="confirm-error-message" style="color: red;"></p> <!-- Сообщение об ошибке -->
+        </form>
+    </div>
+    <div class="links">
+        <p><a href="/login">Вернуться к странице входа</a></p>
+    </div>
+</div>
+
+<div class="footer">
+    <p>Присоединяясь, вы соглашаетесь с <a href="#">Условиями предоставления услуг JUMYS TAP</a> и периодически получать от нас электронные письма.<br>
+        Пожалуйста, ознакомьтесь с нашей <a href="#">Политикой конфиденциальности</a>, чтобы узнать, как мы защищаем ваши персональные данные.</p>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const phone = new URLSearchParams(window.location.search).get('phone');
+        document.getElementById('phoneDisplay').textContent = phone;
+
+        document.getElementById('code').addEventListener('input', function(e) {
+            const codeInput = e.target;
+            const confirmButton = document.getElementById('confirm-button');
+            const codePattern = /^\d{4}$/;
+
+            if (codePattern.test(codeInput.value)) {
+                confirmButton.style.backgroundColor = '#ff7f00';
+                confirmButton.disabled = false;
+            } else {
+                confirmButton.style.backgroundColor = '#cccccc';
+                confirmButton.disabled = true;
+            }
+        });
+
+        const form = document.getElementById('step2-form');
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            fetch('/confirm', { // URL должен быть "/confirm"
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ code: document.getElementById('code').value })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        window.location.href = `/change-password?phone=${phone}`;
+                    } else {
+                        document.getElementById('confirm-error-message').innerText = 'Неверный код подтверждения';
+                    }
+                })
+                .catch(error => {
+                    document.getElementById('confirm-error-message').innerText = 'Произошла ошибка. Попробуйте снова позже.';
+                });
+        });
+    });
+
+</script>
+
+</body>
+</html>

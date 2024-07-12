@@ -1,0 +1,67 @@
+plugins {
+    id 'org.springframework.boot' version '2.7.5'
+    id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+    id 'java'
+}
+
+group = 'org.example'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
+    implementation 'org.springframework.boot:spring-boot-devtools'
+    implementation 'org.projectlombok:lombok:1.18.30'
+    implementation 'mysql:mysql-connector-java:8.0.30'
+    implementation 'org.postgresql:postgresql'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-hibernate5:2.13.0' // Добавлено
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.0' // Добавлено
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+    implementation 'org.mindrot:jbcrypt:0.4'
+    implementation 'org.apache.httpcomponents:httpclient:4.5.13'
+    implementation 'com.konghq:unirest-java:3.13.6'
+    implementation 'org.slf4j:slf4j-api:1.7.32'
+    implementation 'ch.qos.logback:logback-classic:1.2.6'
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+    compileOnly 'org.projectlombok:lombok:1.18.30'
+    annotationProcessor 'org.projectlombok:lombok:1.18.30'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+dependencies {
+    annotationProcessor 'org.projectlombok:lombok:1.18.30'
+    compileOnly 'org.projectlombok:lombok:1.18.30'
+}
+
+tasks.register('bootRunDev', JavaExec) {
+    group = 'application'
+    description = 'Run the Spring Boot application with DevTools'
+    classpath = sourceSets.main.runtimeClasspath
+    main = 'org.example.Application' // Укажите здесь основной класс вашего приложения
+    jvmArgs = [
+            '-Dspring.devtools.restart.enabled=true',
+            '-Dspring.devtools.livereload.enabled=true'
+    ]
+}

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/images/logo Joltap.png" type="image/png">
+    <title>Create Job Advertisement</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            padding: 20px;
+            margin: 0;
+        }
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-container h2 {
+            margin-bottom: 20px;
+            color: #333;
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+        }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .form-group textarea {
+            resize: vertical;
+        }
+        .form-group button {
+            background-color: #ff6600;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            display: block;
+            margin: 0 auto;
+        }
+        .form-group button:hover {
+            background-color: #e65c00;
+        }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <h2>Создать вакансию</h2>
+    <form action="/submit_advertisement" method="post">
+        <div class="form-group">
+            <label for="title">Укажите название*</label>
+            <input type="text" id="title" name="title" placeholder="Например, Ищу швею" required>
+        </div>
+        <div class="form-group">
+            <label for="workSchedule">График работы*</label>
+            <select id="workSchedule" name="workSchedule" required>
+                <option value="">-Не выбрано-</option>
+                <option value="full-time">Полный рабочий день</option>
+                <option value="part-time">Неполный рабочий день</option>
+                <option value="remote">Удаленная работа</option>
+                <option value="flexible">Гибкий график</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="ageRange">Возраст*</label>
+            <select id="ageRange" name="ageRange" required>
+                <option value="">-Не выбрано-</option>
+                <option value="18-25">18-25</option>
+                <option value="26-35">26-35</option>
+                <option value="36-45">36-45</option>
+                <option value="46+">46 и старше</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="requirements">Требования*</label>
+            <textarea id="requirements" name="requirements" rows="4" placeholder="Например,&#10;- Обязательная стажировка&#10;- Опыт работы на производственных машинках не менее 2-х лет&#10;- Санитарная книжка...." required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="conditions">Условия*</label>
+            <textarea id="conditions" name="conditions" rows="4" placeholder="Например,&#10;- Питание 50/50 (комплексный обед стоит 1000 тенге, 50% оплачивает компания)&#10;- Предоставляется бесплатное жилье&#10;- Официальное трудоустройство" required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="salary">Заработная плата*</label>
+            <input type="number" id="salary" name="salary" placeholder="200 000" required>
+        </div>
+        <div class="form-group">
+            <button type="submit">Сохранить</button>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>

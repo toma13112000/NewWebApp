@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Бариста</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #fff;
+            border-bottom: 1px solid #ddd;
+        }
+        .header img {
+            height: 40px;
+        }
+        .header nav a {
+            margin: 0 10px;
+            color: #000;
+            text-decoration: none;
+        }
+        .header .contact {
+            color: #fff;
+            background-color: #f47920;
+            padding: 10px 20px;
+            border-radius: 5px;
+        }
+        .main-content {
+            padding: 20px;
+        }
+        .main-content h1 {
+            color: #f47920;
+        }
+        .skills, .teacher, .equipment, .trusted, .graduates {
+            margin-bottom: 30px;
+        }
+        .skills ul, .equipment ul, .trusted ul, .graduates ul {
+            list-style: none;
+            padding: 0;
+        }
+        .skills ul li, .equipment ul li, .trusted ul li, .graduates ul li {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        .skills ul li::before, .equipment ul li::before {
+            content: '★';
+            color: #f47920;
+            margin-right: 10px;
+        }
+        .teacher img, .equipment img {
+            width: 100%;
+            max-width: 200px;
+            margin-right: 20px;
+        }
+        .teacher, .trusted, .graduates {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .trusted img, .graduates img {
+            max-width: 100px;
+            margin: 10px;
+        }
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+        }
+        .button-group a {
+            background-color: #f47920;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            background-color: #f9f9f9;
+            padding: 20px 0;
+            border-top: 1px solid #ddd;
+            border-bottom: 1px solid #ddd;
+        }
+        .stats div {
+            text-align: center;
+        }
+        .graduates-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+        .graduates-list div {
+            text-align: center;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+<header class="header">
+    <img src="logo.png" alt="JOLTAP">
+    <nav>
+        <a href="#">Для работодателей</a>
+        <a href="#">Для выпускников</a>
+        <a href="#">Вопрос-ответ</a>
+        <a href="#">Оставить отзыв</a>
+    </nav>
+    <div class="contact">
+        <span>+7 707 221-31-31</span>
+    </div>
+</header>
+<main class="main-content">
+    <section class="skills">
+        <h1>Бариста</h1>
+        <h2>Наши выпускники обладают следующими навыками:</h2>
+        <ul>
+            <li>Работать с кофемашинами и оборудованием</li>
+            <li>Основам обслуживания клиентов</li>
+            <li>Базовым навыкам приготовления классических кофейных напитков</li>
+            <li>Основам кофе и его разновидностям</li>
+            <li>Характеристике кофейного сырья</li>
+            <li>Технологии приготовления классических рецептур кофе</li>
+            <li>Технике работы с молоком и латте-арт</li>
+        </ul>
+        <img src="/svg/Group%2014.svg" alt="Skills Image">
+        <img src="/svg/Group%2016.svg" alt="Skills Image">
+        <img src="/svg/Group%2015.svg" alt="Skills Image">
+        <img src="/svg/Group%2017.svg" alt="Skills Image">
+    </section>
+    <section class="teacher">
+        <h2>Преподаватель</h2>
+        <div>
+            <img src="teacher_image.jpg" alt="Ильяс Турар Муратулы">
+            <div>
+                <p>Ильяс Турар Муратулы</p>
+                <p>Преподаватель-практик с опытом работы более 14-ти лет:</p>
+                <ul>
+                    <li>Победитель чемпионата среди бариста «Monin Cup»</li>
+                    <li>Призер некоммерческого конкурса среди бариста по LATTE ART</li>
+                    <li>Шеф-Бариста кофейни "Keks" и основатель сети кофеен "RUH Coffee"</li>
+                </ul>
+                <div class="button-group">
+                    <a href="#">Смотреть видеоролик</a>
+                    <a href="#">Создать объявление</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="equipment">
+        <h2>Оборудование</h2>
+        <ul>
+            <li>Кофемашина Nuova Simonelli Appia Life 1Gr S полуавтомат</li>
+            <li>Кофемолка Fiorenzato F64E</li>
+            <li>Блендер для приготовления молочно-кофейных напитков Braun</li>
+        </ul>
+        <img src="equipment_image.jpg" alt="Equipment Image">
+    </section>
+    <section class="trusted">
+        <h2>Нашим выпускникам доверяют:</h2>
+        <ul>
+            <li><img src="logo1.png" alt="JOY"></li>
+            <li><img src="logo2.png" alt="Fate"></li>
+            <li><img src="logo3.png" alt="Aroma Coffee"></li>
+            <li><img src="logo4.png" alt="Global Coffee"></li>
+            <li><img src="logo5.png" alt="Delish"></li>
+        </ul>
+    </section>
+    <section class="graduates">
+        <h2>Наши выпускники</h2>
+        <div class="stats">
+            <div>
+                <h3>10</h3>
+                <p>открыли свои мини-кофейни</p>
+            </div>
+            <div>
+                <h3>37</h3>
+                <p>в процессе открытия кофеен</p>
+            </div>
+            <div>
+                <h3>183</h3>
+                <p>успешно трудоустроены</p>
+            </div>
+            <div>
+                <h3>55</h3>
+                <p>студенты на подработке</p>
+            </div>
+        </div>
+        <div class="graduates-list">
+            <div>
+                <img src="graduate1.jpg" alt="Жанель Алпекова">
+                <p>Алпекова Жанель</p>
+                <p>Шеф</p>
+            </div>
+            <div>
+                <img src="graduate2.jpg" alt="Амрина Альбина">
+                <p>Амрина Альбина</p>
+                <p>Шеф</p>
+            </div>
+            <div>
+                <img src="graduate3.jpg" alt="Байдалина Алия">
+                <p>Байдалина Алия</p>
+                <p>Шеф</p>
+            </div>
+            <div>
+                <img src="graduate4.jpg" alt="Бекболова Бекзада">
+                <p>Бекболова Бекзада</p>
+                <p>Шеф</p>
+            </div>
+            <div>
+                <img src="graduate5.jpg" alt="Гниярова Данияра">
+                <p>Гниярова Данияра</p>
+                <p>Шеф</p>
+            </div>
+            <div>
+                <img src="graduate6.jpg" alt="Дияров Айжан">
+                <p>Дияров Айжан</p>
+                <p>Шеф</p>
+            </div>
+        </div>
+        <a href="#" class="button-group">Создать объявление</a>
+    </section>
+</main>
+</body>
+</html>

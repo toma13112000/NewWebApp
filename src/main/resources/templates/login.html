@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JOLTAP Вход</title>
+    <link rel="icon" href="/images/logo Joltap.png" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+        .header a {
+            text-decoration: none;
+            color: #000000;
+            margin-right: 20px;
+        }
+        .contact-button {
+            background-color: #ff7f00;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .main {
+            margin-top: 50px;
+        }
+        .form-container {
+            display: inline-block;
+            text-align: left;
+        }
+        .form-container input,
+        .form-container button {
+            max-width: 300px;
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #cccccc;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        .form-container button:enabled {
+            background-color: #ff7f00;
+            cursor: pointer;
+        }
+        .links {
+            margin-top: 20px;
+        }
+        .links a {
+            text-decoration: none;
+            color: #ff7f00;
+            margin: 0 5px;
+        }
+        .footer {
+            margin-top: 50px;
+            color: #cccccc;
+            font-size: 12px;
+        }
+        .footer a {
+            color: #cccccc;
+            text-decoration: none;
+        }
+        .error-message {
+            color: red;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="logo">
+        <img src="/images/logo Joltap.png" alt="JOLTAP Logo">
+    </div>
+    <div>
+        <a href="#" class="index" id="index-link">Вернуться на главную</a>
+        <a href="tel:+77072213131" class="phone">
+            <span class="fa fa-phone"></span> +7 707 221-31-31
+        </a>
+        <a href="#" id="login-link">Вход</a>
+    </div>
+</div>
+
+<div class="main">
+    <h1>Вход</h1>
+    <div class="form-container">
+        <form id="login-form" action="/api/login" method="POST">
+            <label for="phone">Введите номер телефона</label><br>
+            <input type="text" id="phone" name="phone" placeholder="+7 (___) ___-__-__" required>
+            <label for="password">Введите пароль</label><br>
+            <input type="password" id="password" name="password" placeholder="************" required><br>
+            <button type="submit" disabled>ВОЙТИ</button>
+            <div class="error-message" id="error-message"></div>
+        </form>
+    </div>
+    <div class="links">
+        <p>Нет аккаунта? <a href="/register">Зарегистрируйтесь</a></p>
+        <p>Забыли пароль? <a href="/reset">Восстановите аккаунт</a></p>
+    </div>
+</div>
+
+<div class="footer">
+    <p>Присоединяясь, вы соглашаетесь с <a href="#">Условиями предоставления услуг JUMYS TAP</a> и периодически получать от нас электронные письма.<br>
+        Пожалуйста, ознакомьтесь с нашей <a href="#">Политикой конфиденциальности</a>, чтобы узнать, как мы защищаем ваши персональные данные.</p>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        function formatPhoneNumber(phoneInput) {
+            let value = phoneInput.value.replace(/\D/g, '');
+            if (value.startsWith('7')) {
+                value = value.slice(1);
+            }
+            if (value.length > 10) {
+                value = value.slice(0, 10);
+            }
+            let formattedValue = '+7 (';
+            if (value.length > 0) formattedValue += value.slice(0, 3);
+            if (value.length >= 4) formattedValue += ') ' + value.slice(3, 6);
+            if (value.length >= 7) formattedValue += '-' + value.slice(6, 8);
+            if (value.length >= 9) formattedValue += '-' + value.slice(8, 10);
+            return formattedValue;
+        }
+
+        function validateForm() {
+            const phoneInput = document.getElementById('phone').value;
+            const passwordInput = document.getElementById('password').value;
+            const loginButton = document.querySelector('.form-container button');
+            const isPhoneValid = phoneInput.match(/^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/);
+            const isPasswordValid = passwordInput.length > 0;
+            loginButton.disabled = !(isPhoneValid && isPasswordValid);
+        }
+
+        document.getElementById('phone').addEventListener('input', function (e) {
+            const phoneInput = e.target;
+            phoneInput.value = formatPhoneNumber(phoneInput);
+            validateForm();
+        });
+
+        document.getElementById('password').addEventListener('input', validateForm);
+
+        document.getElementById('index-link').addEventListener('click', function (event) {
+            event.preventDefault();
+            window.location.href = '/index';
+        });
+
+        document.getElementById('login-form').addEventListener('submit', function (event) {
+            event.preventDefault();
+            let phone = document.getElementById('phone').value;
+            let password = document.getElementById('password').value;
+            fetch('/api/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({phoneNumber: phone, password: password})
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        if (response.status === 404) {
+                            throw new Error('Пользователь не зарегистрирован');
+                        } else if (response.status === 401) {
+                            throw new Error('Неверный пароль');
+                        } else {
+                            throw new Error('Авторизация не удалась');
+                        }
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    localStorage.setItem('jwtToken', data.token); // Сохранение токена в LocalStorage
+                    fetchCurrentUser(); // Переносим вызов функции для получения данных о текущем пользователе
+                })
+                .catch(error => {
+                    document.getElementById('error-message').textContent = error.message; // Отображение сообщения об ошибке
+                });
+        });
+
+        function fetchCurrentUser() {
+            const token = localStorage.getItem('jwtToken');
+            fetch('/api/current_user', {
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
+            })
+                .then(response => {
+                    if (!response.ok) throw new Error('Не удалось получить данные пользователя');
+                    return response.json();
+                })
+                .then(data => {
+                    if (data && data.username) {
+                        const loginLink = document.getElementById('login-link');
+                        loginLink.style.display = 'none';
+                        const usernameDisplay = document.createElement('a');
+                        usernameDisplay.textContent = data.username;
+                        usernameDisplay.href = '/profile';
+                        usernameDisplay.className = 'login';
+                        document.querySelector('.header').appendChild(usernameDisplay);
+                        window.location.href = '/index'; // Перенаправление после успешного получения данных
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching current user:', error);
+                });
+        }
+    });
+</script>
+
+</body>
+</html>

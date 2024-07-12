@@ -1,0 +1,1299 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/images/logo Joltap.png" type="image/png">
+    <title>JOLTAP Регистрация</title>
+    <link rel="icon" href="/images/logo Joltap.png" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+        .header a {
+            text-decoration: none;
+            color: #000000;
+            margin-right: 20px;
+        }
+        .phone {
+            text-decoration: none;
+            color: #fff;
+            background-color: #f36706;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 400;
+            display: flex;
+            align-items: center;
+        }
+        .phone .fa-phone {
+            margin-right: 10px;
+        }
+        .main {
+            margin-top: 50px;
+        }
+        .form-container {
+            display: block;
+            text-align: left;
+            margin: 0 auto;
+        }
+        .form-container .error-message{
+            color: red;
+            font-size: 12px;
+            margin: 5px 0;
+        }
+        .form-container .hidden{
+            display: none;
+        }
+        .form-container form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+        .form-container button {
+            width: 100%;
+            max-width: 300px;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #cccccc;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .form-container input, .form-container .password-container input, .form-container .date-container input,
+        .form-container .certificate-container input {
+            width: 100%;
+            max-width: 300px;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            cursor: pointer;
+            box-sizing: border-box; /* Добавлено для учета padding и border */
+        }
+        .date-container {
+            width: 100%;
+            max-width: 300px;
+            margin-top: 15px;
+        }
+        .date-container label {
+            display: block;
+            margin-bottom: 5px;
+            color: #666;
+        }
+
+        .form-container label {
+            margin-top: 15px;
+            display: block;
+            cursor: pointer;
+            color: #666;
+        }
+        .form-container .active {
+            background-color: #f36706;
+            color: #ffffff;
+        }
+        .form-container .inactive {
+            background-color: #f5f5f5;
+            color: #cccccc;
+        }
+        .form-container .continue, .form-container .next, .form-container .finish {
+            background-color: #cccccc;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: not-allowed;
+        }
+        .form-container .continue.active, .form-container .next.active, .form-container .finish.active {
+            background-color: #ff7f00;
+            cursor: pointer;
+        }
+        .links {
+            margin-top: 20px;
+        }
+        .links a {
+            text-decoration: none;
+            color: #ff7f00;
+            margin: 0 5px;
+        }
+        .footer {
+            margin-top: 50px;
+            color: #cccccc;
+            font-size: 12px;
+        }
+        .footer a {
+            color: #cccccc;
+            text-decoration: none;
+        }
+
+        .inactive {
+            background-color: #f5f5f5;
+            color: #cccccc;
+        }
+        button:disabled {
+            background-color: #cccccc; /* Цвет фона для неактивной кнопки */
+            color: #666666; /* Цвет текста для неактивной кнопки */
+        }
+
+        button:not(:disabled) {
+            background-color: #f36706; /* Цвет фона для активной кнопки */
+            color: #ffffff; /* Цвет текста для активной кнопки */
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .active {
+            display: block;
+        }
+
+
+        .form-container .personal-info, .form-container .password-info {
+            display: none; /* По умолчанию скрыты */
+        }
+
+        .form-container .step-visible {
+            display: block; /* Отображаем активный шаг */
+        }
+
+        input[type="file"] {
+            display: none; /* Скрыть стандартное поле */
+        }
+
+
+        .upload-label {
+            display: block;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .password-container {
+            position: relative;
+            width: 100%;
+            max-width: 300px;
+            margin-top: 5px;
+        }
+
+        .fa-eye {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            cursor: pointer;
+        }
+        .select2-container--default .select2-selection--single {
+            height: 40px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            width: 300px;
+            padding: 8px 12px;
+            background-color: #f5f5f5;
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            line-height: 24px;
+            color: #666;
+            flex-grow: 1; /* Разрешает тексту занимать доступное пространство */
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 100%;
+            width: 20px; /* Фиксированная ширина для стрелки */
+            margin-left: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+
+        .select2-dropdown {
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            width: 100%;
+            min-width: 300px; /* Set a fixed minimum width */
+            max-width: 300px; /* Set a fixed maximum width */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            box-sizing: border-box;
+        }
+
+        .select2-results__option {
+            padding: 8px 12px;
+            font-size: 16px;
+            color: #666;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .select2-results__option--highlighted[aria-selected] {
+            background-color: #f36706 !important;
+            color: #fff !important;
+        }
+
+
+        .select2-results__option--highlighted {
+            background-color: #f36706;
+            color: #fff;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            localStorage.setItem('redirectAfterRegistration', document.referrer);
+        });
+    </script>
+
+</head>
+<body>
+
+<div class="header">
+    <div class="logo">
+        <img src="/images/logo Joltap.png" alt="JOLTAP Logo">
+    </div>
+    <div>
+        <a href="/index">Вернуться на главную</a>
+        <a href="tel:+77072213131" class="phone">
+            <span class="fa fa-phone"></span> +7 707 221-31-31
+        </a>
+        <a href="/login">Вход</a>
+    </div>
+</div>
+
+<div class="main" id="step1">
+    <h1>Регистрация</h1>
+    <p>Давайте познакомимся, кто вы?</p>
+    <div class="form-container">
+        <!-- Форма шага 1 -->
+        <form id="step1-form" action="/submit-form" method="POST">
+            <!-- Кнопки выбора роли -->
+            <button type="button" class="inactive" id="EMPLOYER1" data-value="Я ИЩУ СОТРУДНИКА">Я ИЩУ СОТРУДНИКА</button>
+            <button type="button" class="inactive" id="EMPLOYER2" data-value="Я ИЩУ ИСПОЛНИТЕЛЯ ЗАКАЗА">Я ИЩУ ИСПОЛНИТЕЛЯ ЗАКАЗА</button>
+            <button type="button" class="inactive" id="GRADUATE" data-value="Я ИЩУ РАБОТУ ИЛИ ЗАКАЗ">Я ИЩУ РАБОТУ ИЛИ ЗАКАЗ</button>
+            <!-- Скрытое поле для хранения выбранной роли -->
+            <input type="hidden" name="role" id="role" value="">
+            <!-- Кнопка продолжения, заблокированная по умолчанию -->
+            <button type="button" class="continue" id="continue-button-step1" disabled>ПРОДОЛЖИТЬ</button>
+        </form>
+    </div>
+    <div class="links">
+        <p>Есть аккаунт? <a href="/login">Перейти ко входу</a></p>
+    </div>
+</div>
+
+<div class="main hidden" id="step2-employee">
+    <h1>Регистрация</h1>
+    <p>Выберите вид:</p>
+    <div class="form-container">
+        <!-- Форма шага 2 для сотрудников -->
+        <form id="step2-employee-form" action="/submit-form" method="POST">
+            <!-- Кнопки выбора типа сотрудника -->
+            <button type="button" class="inactive" id="EMPLOYER" data-value="РАБОТОДАТЕЛЬ">РАБОТОДАТЕЛЬ</button>
+            <button type="button" class="inactive" id="RECRUITING_AGENCY" data-value="РЕКРУТИНГОВОЕ АГЕНТСТВО">РЕКРУТИНГОВОЕ АГЕНТСТВО</button>
+            <!-- Скрытое поле для хранения выбранного типа -->
+            <input type="hidden" name="type" id="type" value="">
+            <!-- Кнопка продолжения, заблокированная по умолчанию -->
+            <button type="submit" class="continue" id="continue-button-step2-employee" disabled>ПРОДОЛЖИТЬ</button>
+        </form>
+    </div>
+    <div class="links">
+        <p>Есть аккаунт? <a href="/login">Перейти ко входу</a></p>
+    </div>
+</div>
+
+<div class="main hidden" id="step3-graduate">
+    <h1>Регистрация</h1>
+    <div class="form-container">
+        <!-- Форма шага 3 для выпускников -->
+        <form id="step3-graduate-form" action="/submit-form" method="POST" enctype="multipart/form-data">
+            <!-- Шаг 3.1: Личные данные -->
+            <div class="personal-info step-visible">
+                <label for="graduate-name">Как вас зовут?</label>
+                <input type="text" id="graduate-name" name="graduate-name" placeholder="Фамилия Имя" />
+                <p id="graduate-name-error" class="error-message hidden">Поле заполнено неверно</p>
+
+                <div class="date-container">
+                    <label for="graduate-birth-date">Введите вашу дату рождения (или выберите в календаре)</label>
+                    <input type="date" id="graduate-birth-date" name="graduate-birth-date" />
+                    <p id="birth-date-error" class="error-message hidden">Некорректная дата рождения</p>
+
+                </div>
+
+                <label for="graduate-phone">Введите ваш номер телефона</label>
+                <input type="text" id="graduate-phone" name="graduate-phone" placeholder="+7 (___) ___-__-__" />
+                <p id="graduate-phone-error" class="error-message hidden">Поле заполнено неверно</p>
+
+                <label for="graduate-email">Введите вашу электронную почту</label>
+                <input type="email" id="graduate-email" name="graduate-email" placeholder="example@example.com" />
+                <p id="graduate-email-error" class="error-message hidden">Поле заполнено неверно</p>
+
+                <button type="button" class="next" id="continue-button-step3-graduate" disabled>ПРОДОЛЖИТЬ</button>
+            </div>
+            <!-- Шаг 3.2: Пароль и подтверждение -->
+            <div class="password-info hidden">
+                <label for="password-graduate">Придумайте пароль</label>
+                <div class="password-container">
+                    <input type="password" id="password-graduate" name="password-graduate" placeholder="Введите пароль"/>
+                    <span class="fa fa-eye" id="togglePasswordGraduate"></span>
+                </div>
+                <p id="password-error-graduate" class="error-message hidden">Пароль должен содержать не менее 4 символов</p>
+
+                <label for="password2-graduate">Подтвердите пароль</label>
+                <div class="password-container">
+                    <input type="password" id="password2-graduate" name="password2-graduate" placeholder="Подтвердите пароль" class="form-input" />
+                    <span class="fa fa-eye" id="togglePassword2Graduate"></span>
+                </div>
+                <p id="password2-error-graduate" class="error-message hidden">Пароли не совпадают</p>
+
+                <button type="button" class="next" id="continue-button-step3-graduate-password" disabled>ПРОДОЛЖИТЬ</button>
+            </div>
+            <!-- Шаг 3.3: Сертификаты -->
+            <div class="certificate-info hidden">
+                <p>Выберите сколько у вас сертификатов:</p>
+                <button type="button" class="inactive" id="ONE" data-value="ОДИН">ОДИН</button>
+                <button type="button" class="inactive" id="MORE" data-value="НЕСКОЛЬКО">НЕСКОЛЬКО</button>
+                <!-- Скрытое поле для хранения выбранного варианта -->
+                <input type="hidden" name="type" id="count" value="">
+                <!-- Кнопка продолжения, заблокированная по умолчанию -->
+                <button type="submit" class="continue" id="continue-button-step3-graduate-certificate-count" disabled>ПРОДОЛЖИТЬ</button>
+            </div>
+            <div class="skills-info hidden">
+                <label for="skill_name">Выберите навык, полученный в рамках JOLTAP</label>
+                <select id="skill_name" name="skill_name" class="select2">
+                    <option value="skill1">Продавец-кассир</option>
+                    <option value="skill2">Бариста</option>
+                    <option value="skill3">Швея</option>
+                    <option value="skill4">Модельер-конструктор</option>
+                    <option value="skill5">Ремонт обуви и изготовление ключей</option>
+                    <option value="skill6">Сварщик</option>
+                    <option value="skill7">Основы бухгалтерского учета</option>
+                    <option value="skill8">Основы изготовления корпусной мебели</option>
+                    <option value="skill9">Универсальный сотрудник общепита</option>
+                    <option value="skill10">Маркетплейс</option>
+                    <option value="skill11">Графический дизайн</option>
+                    <option value="skill12">Видеомонтаж</option>
+                    <option value="skill13">Разработка сайтов</option>
+                    <option value="skill14">Базовые цифровые навыки</option>
+                    <option value="skill15">SMM</option>
+                    <option value="skill16">Таргет</option>
+                    <option value="skill17">Мобилограф</option>
+                </select>
+                <label for="certificate_number">Введите номер сертификата</label>
+                <input type="text" id="certificate_number" name="certificate_number" placeholder="000001" />
+                <label for="certificate_date">Введите дату сертификата</label>
+                <input type="date" id="certificate_date" name="certificate_date" />
+                <button type="button" class="next" id="continue-button-step3-graduate-certificate" disabled>ДАЛЕЕ</button>
+            </div>
+            <!-- Шаг 3.4: Добавление сертификатов -->
+            <div class="new-skill-info hidden">
+                <input type="text" id="summary" readonly>
+                <span class="edit">Редактировать</span>
+                <span class="delete">Удалить</span>
+                <div class="add-certificate">+ Добавить сертификат</div>
+                <button type="button" class="next" id="continue-button-step3-graduate-submit">ПРОДОЛЖИТЬ</button>
+            </div>
+            <div class="worktype-info hidden">
+                <!-- Шаг 3.5: Выбор вида работы -->
+                <p>Какой вид работы вы ищете:</p>
+                <button type="button" class="inactive" id="full-time-job" data-value="Я ИЩУ ПОСТОЯННУЮ РАБОТУ">Я ИЩУ ПОСТОЯННУЮ РАБОТУ</button>
+                <button type="button" class="inactive" id="part-time-job" data-value="Я ИЩУ ЗАКАЗЫ НА ОБЪЕМ">Я ИЩУ ЗАКАЗЫ НА ОБЪЕМ</button>
+                <input type="hidden" name="job-time-type" id="job-time-type" value="">
+                <button type="button" class="next" id="continue-button-step3-graduate-job-type" disabled>ПРОДОЛЖИТЬ</button>
+            </div>
+            <div class="activity-info hidden">
+
+                <!-- Шаг 3.6: Статус поиска -->
+                <p>Какой ваш статус поиска:</p>
+                <button type="button" class="inactive" id="active-search" data-value="В АКТИВНОМ ПОИСКЕ">В АКТИВНОМ ПОИСКЕ</button>
+                <button type="button" class="inactive" id="not-active-search" data-value="НЕ В АКТИВНОМ ПОИСКЕ">НЕ В АКТИВНОМ ПОИСКЕ</button>
+                <input type="hidden" name="job-search-status" id="job-search" value="">
+                <button type="button" class="next" id="continue-button-step3-graduate-activity" disabled>ПРОДОЛЖИТЬ</button>
+            </div>
+
+            <div class="photo-info hidden">
+                <!-- Шаг 3.7: Загрузка фотографии -->
+                <p>Загрузите вашу фотографию</p>
+                <p>Ознакомьтесь с <a href="#">требованиями</a></p>
+                <label for="profile-photo" class="upload-label">
+                    <img id="upload-image" src="/images/photo.svg" alt="Upload icon">
+                    Выберите файл из файловой системы или перенесите в данное поле
+                    <input type="file" id="profile-photo" name="profile-photo" accept="image/*" />
+                </label>
+                <button type="button" class="next" id="continue-button-step3-graduate-photo" disabled>ДАЛЕЕ</button>
+            </div>
+            <div class="portfolio-info hidden">
+                <!-- Шаг 3.8: Загрузка портфолио -->
+                <p>Загрузите ваши работы при наличии</p>
+                <p>Ознакомьтесь с <a href="#">требованиями</a></p>
+                <label for="portfolio-files" class="upload-label">
+                    <img id="upload-image2" src="/images/photo.svg" alt="Upload icon">
+                    Выберите файлы из файловой системы или перенесите в данное поле
+                    <input type="file" id="portfolio-files" name="portfolio-files[]" multiple />
+                </label>
+                <button type="submit" class="finish" id="finish-button-step3-graduate" disabled>ПРОДОЛЖИТЬ</button>
+            </div>
+        </form>
+    </div>
+    <div class="links">
+        <p>Есть аккаунт? <a href="/login">Перейти ко входу</a></p>
+    </div>
+</div>
+
+
+<div class="main hidden" id="step3-employee">
+    <h1>Регистрация</h1>
+    <div class="form-container">
+        <!-- Форма для работодателя -->
+        <form id="step3-employee-form" action="/submit-form" method="POST">
+            <!-- Шаг 3.1: Личные данные работодателя -->
+            <div class="personal-info step-visible">
+                <label for="employee-name">Как вас зовут?</label>
+                <input type="text" id="employee-name" name="employee-name" placeholder="Фамилия Имя" />
+                <p id="employee-name-error" class="error-message hidden">Поле заполнено неверно</p>
+
+                <label for="employee-phone">Введите ваш номер телефона</label>
+                <input type="text" id="employee-phone" name="employee-phone" placeholder="+7 (___) ___-__-__" />
+                <p id="employee-phone-error" class="error-message hidden">Поле заполнено неверно</p>
+
+                <label for="employee-email">Введите вашу электронную почту</label>
+                <input type="email" id="employee-email" name="employee-email" placeholder="example@example.com" />
+                <p id="employee-email-error" class="error-message hidden">Поле заполнено неверно</p>
+                <button type="button" class="continue" id="continue-button-step3-employee" disabled>ПРОДОЛЖИТЬ</button>
+            </div>
+
+            <!-- Шаг 3.2: Пароль и подтверждение -->
+            <div class="password-info hidden">
+                <label for="password-employee">Придумайте пароль</label>
+                <div class="password-container">
+                    <input type="password" id="password-employee" name="password-employee" placeholder="Введите пароль" />
+                    <span class="fa fa-eye" id="togglePasswordEmployee"></span>
+                </div>
+                <p id="password-error-employee" class="error-message hidden">Пароль должен содержать не менее 4 символов</p>
+
+                <label for="password2-employee">Подтвердите пароль</label>
+                <div class="password-container">
+                    <input type="password" id="password2-employee" name="password2-employee" placeholder="Подтвердите пароль" />
+                    <span class="fa fa-eye" id="togglePassword2Employee"></span>
+                </div>
+                <p id="password2-error-employee" class="error-message hidden">Пароли не совпадают</p>
+                <button type="button" class="continue" id="continue-button-step3-employee-password" disabled>ПРОДОЛЖИТЬ</button>
+            </div>
+
+            <!-- Шаг 3.3: Данные компании -->
+            <div class="company-info hidden">
+                <label for="company_name">Название компании</label>
+                <input type="text" id="company_name" name="company_name" placeholder='ТОО "Пример"' />
+
+                <label for="company_url">Ссылка на 2ГИС</label>
+                <input type="url" id="company_url" name="company_url" placeholder="Ссылка" />
+
+                <label for="company_activities">Деятельность компании</label>
+                <input type="text" id="company_activities" name="company_activities" placeholder="Например: строительство" />
+                <button type="submit" class="finish" id="continue-button-step3-employee-submit" disabled>ЗАВЕРШИТЬ РЕГИСТРАЦИЮ</button>
+            </div>
+        </form>
+    </div>
+    <div class="links">
+        <p>Есть аккаунт? <a href="/login">Перейти ко входу</a></p>
+    </div>
+</div>
+
+<div class="main hidden" id="step3-recruiting-agency">
+    <h1>Регистрация</h1>
+    <div class="form-container">
+        <!-- Форма для рекрутингового агентства -->
+        <form id="step3-recruiting-agency-form" action="/submit-form" method="POST">
+            <!-- Шаг 3.1: Личные данные рекрутингового агентства -->
+            <div class="personal-info step-visible">
+                <label for="recruiting-agency-name">Как вас зовут?</label>
+                <input type="text" id="recruiting-agency-name" name="recruiting-agency-name" placeholder="Фамилия Имя" />
+                <p id="recruiting-agency-name-error" class="error-message hidden">Поле заполнено неверно</p>
+
+                <label for="recruiting-agency-phone">Введите ваш номер телефона</label>
+                <input type="text" id="recruiting-agency-phone" name="recruiting-agency-phone" placeholder="+7 (___) ___-__-__" />
+                <p id="recruiting-agency-phone-error" class="error-message hidden">Поле заполнено неверно</p>
+
+                <label for="recruiting-agency-email">Введите вашу электронную почту</label>
+                <input type="email" id="recruiting-agency-email" name="recruiting-agency-email" placeholder="example@example.com" />
+                <p id="recruiting-agency-email-error" class="error-message hidden">Поле заполнено неверно</p>
+                <button type="button" class="continue" id="continue-button-step3-recruiting-agency" disabled>ПРОДОЛЖИТЬ</button>
+            </div>
+
+            <!-- Шаг 3.2: Пароль и подтверждение -->
+            <div class="password-info">
+                <label for="password-recruiting-agency">Придумайте пароль</label>
+                <div class="password-container">
+                    <input type="password" id="password-recruiting-agency" name="password-recruiting-agency" placeholder="Введите пароль" />
+                    <span class="fa fa-eye" id="togglePasswordRecruitingAgency"></span>
+                </div>
+                <p id="password-error-recruiting-agency" class="error-message hidden">Пароль должен содержать не менее 4 символов</p>
+
+                <label for="password2-recruiting-agency">Подтвердите пароль</label>
+                <div class="password-container">
+                    <input type="password" id="password2-recruiting-agency" name="password2-recruiting-agency" placeholder="Подтвердите пароль" />
+                    <span class="fa fa-eye" id="togglePassword2RecruitingAgency"></span>
+                </div>
+                <p id="password2-error-recruiting-agency" class="error-message hidden">Пароли не совпадают</p>
+                <label>
+                    <input type="checkbox" id="agree-terms-agency"> Я принимаю <a href="/terms" target="_blank">Условия предоставления услуг JUMYS TAP</a> и <a href="/privacy" target="_blank">Политику конфиденциальности</a>
+                </label>
+                <button type="submit" class="finish" id="continue-button-step3-recruiting-agency-submit" disabled>ЗАВЕРШИТЬ РЕГИСТРАЦИЮ</button>
+            </div>
+        </form>
+    </div>
+    <div class="links">
+        <p>Есть аккаунт? <a href="/login">Перейти ко входу</a></p>
+    </div>
+</div>
+<div class="footer">
+    <p>Присоединяясь, вы соглашаетесь с <a href="/terms" target="_blank">Условиями предоставления услуг JUMYS TAP</a> и периодически получать от нас электронные письма.<br>
+        Пожалуйста, ознакомьтесь с нашей <a href="/privacy" target="_blank">Политикой конфиденциальности</a>, чтобы узнать, как мы защищаем ваши персональные данные.</p>
+</div>
+<!-- Подключение jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- Подключение Select2 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#skill_name').select2();
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+        // Шаг 1 - Выбор роли ДЛЯ ВСЕХ
+        const step1Buttons = document.querySelectorAll('#step1 .form-container button[type="button"]');
+        const roleInput = document.getElementById('role');
+        const continueButton = document.getElementById('continue-button-step1');
+        let selectedRole = '';
+
+        function toggleButtonState(checkbox, button) {
+            checkbox.addEventListener('change', () => {
+                if (checkbox.checked) {
+                    button.classList.add('active');
+                    button.disabled = false;
+                } else {
+                    button.classList.remove('active');
+                    button.disabled = true;
+                }
+            });
+        }
+
+        step1Buttons.forEach(button => {
+            button.addEventListener('click', function () {
+                if (this.id === 'EMPLOYER1' || this.id === 'EMPLOYER2' || this.id === 'GRADUATE') {
+                    step1Buttons.forEach(btn => {
+                        btn.classList.remove('active');
+                        btn.classList.add('inactive');
+                    });
+                    this.classList.add('active');
+                    this.classList.remove('inactive');
+                    selectedRole = this.getAttribute('data-value');
+                    roleInput.value = selectedRole;
+                    continueButton.classList.add('active');
+                    continueButton.disabled = false;
+                }
+            });
+        });
+
+        continueButton.addEventListener('click', function (event) {
+            event.preventDefault();
+            roleInput.value = selectedRole;
+            if (!roleInput.value) {
+                alert('Пожалуйста, выберите роль перед продолжением.');
+                return;
+            }
+            document.getElementById('step1').classList.add('hidden');
+            if (roleInput.value === 'Я ИЩУ СОТРУДНИКА' || roleInput.value === 'Я ИЩУ ИСПОЛНИТЕЛЯ ЗАКАЗА') {
+                document.getElementById('step2-employee').classList.remove('hidden');
+            } else if (roleInput.value === 'Я ИЩУ РАБОТУ ИЛИ ЗАКАЗ') {
+                document.getElementById('step3-graduate').classList.remove('hidden');
+            }
+        });
+
+        // Шаг 2 для работодателей - Выбор типа
+        const step2EmployeeButtons = document.querySelectorAll('#step2-employee .form-container button[type="button"]');
+        const typeInput = document.getElementById('type');
+        const step2EmployeeContinueButton = document.getElementById('continue-button-step2-employee');
+        let selectedType = '';
+
+        step2EmployeeButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                if (this.id === 'EMPLOYER' || this.id === 'RECRUITING_AGENCY') {
+                    step2EmployeeButtons.forEach(btn => {
+                        btn.classList.remove('active');
+                        btn.classList.add('inactive');
+                    });
+                    this.classList.add('active');
+                    this.classList.remove('inactive');
+                    selectedType = this.getAttribute('data-value');
+                    typeInput.value = selectedType;
+                    step2EmployeeContinueButton.classList.add('active');
+                    step2EmployeeContinueButton.disabled = false;
+                }
+            });
+        });
+
+        step2EmployeeContinueButton.addEventListener('click', function (event) {
+            event.preventDefault();
+            typeInput.value = selectedType;
+            if (!typeInput.value) {
+                alert('Пожалуйста, выберите вид перед продолжением.');
+                return;
+            }
+            document.getElementById('step2-employee').classList.add('hidden');
+            if (typeInput.value === 'РАБОТОДАТЕЛЬ') {
+                document.getElementById('step3-employee').classList.remove('hidden');
+            } else if (typeInput.value === 'РЕКРУТИНГОВОЕ АГЕНТСТВО') {
+                document.getElementById('step3-recruiting-agency').classList.remove('hidden');
+            }
+        });
+
+        // Шаг 3 для рекрутинговых агентств
+        const agencyNameInput = document.getElementById('recruiting-agency-name');
+        const agencyPhoneInput = document.getElementById('recruiting-agency-phone');
+        const agencyEmailInput = document.getElementById('recruiting-agency-email');
+        const agencyPasswordInput = document.getElementById('password-recruiting-agency');
+        const agencyPassword2Input = document.getElementById('password2-recruiting-agency');
+        const togglePasswordAgency = document.getElementById('togglePasswordRecruitingAgency');
+        const togglePassword2Agency = document.getElementById('togglePassword2RecruitingAgency');
+        const continueButtonAgency = document.getElementById('continue-button-step3-recruiting-agency');
+        const submitButtonAgency = document.getElementById('continue-button-step3-recruiting-agency-submit');
+        const agreeTermsAgency = document.getElementById('agree-terms-agency');
+        toggleButtonState(agreeTermsAgency, submitButtonAgency);
+
+        function formatPhoneNumber(phoneInput) {
+            let value = phoneInput.value.replace(/\D/g, '');
+            if (value.startsWith('7')) {
+                value = value.slice(1);
+            }
+            if (value.length > 10) {
+                value = value.slice(0, 10);
+            }
+            let formattedValue = '+7 (';
+            if (value.length > 0) formattedValue += value.slice(0, 3);
+            if (value.length >= 4) formattedValue += ') ' + value.slice(3, 6);
+            if (value.length >= 7) formattedValue += '-' + value.slice(6, 8);
+            if (value.length >= 9) formattedValue += '-' + value.slice(8, 10);
+            phoneInput.value = formattedValue;
+        }
+
+        agencyPhoneInput.addEventListener('input', function() {
+            formatPhoneNumber(this);
+        });
+
+        function validatePhone(inputElement, errorElement) {
+            const phonePattern = /^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/;
+            const isValid = phonePattern.test(inputElement.value.trim());
+            if (isValid) {
+                errorElement.classList.add('hidden');
+            } else {
+                errorElement.classList.remove('hidden');
+            }
+            return isValid;
+        }
+
+        function validateField(inputElement, errorElement, pattern) {
+            const isValid = pattern.test(inputElement.value.trim());
+            if (isValid) {
+                errorElement.classList.add('hidden');
+            } else {
+                errorElement.classList.remove('hidden');
+            }
+            return isValid;
+        }
+
+        function agencyValidateForm() {
+            const isNameValid = validateField(agencyNameInput, document.getElementById('recruiting-agency-name-error'), /^[\w\sА-яЁё]+$/i);
+            const isEmailValid = validateField(agencyEmailInput, document.getElementById('recruiting-agency-email-error'), /^[^\s@]+@[^\s@]+\.[^\s@]+$/);
+            const isPhoneValid = validatePhone(agencyPhoneInput, document.getElementById('recruiting-agency-phone-error'));
+            const isPasswordValid = validateField(agencyPasswordInput, document.getElementById('password-error-recruiting-agency'), /.{4,}/);
+            const isPassword2Valid = agencyPasswordInput.value === agencyPassword2Input.value;
+            console.log("Validation Status:", isNameValid, isEmailValid, isPhoneValid);
+
+            if (isPassword2Valid) {
+                document.getElementById('password2-error-recruiting-agency').classList.add('hidden');
+            } else {
+                document.getElementById('password2-error-recruiting-agency').classList.remove('hidden');
+            }
+
+            if (isNameValid && isEmailValid && isPhoneValid) {
+                continueButtonAgency.classList.add('active');
+                continueButtonAgency.classList.remove('disabled');
+                continueButtonAgency.disabled = false;
+            } else {
+                continueButtonAgency.classList.remove('active');
+                continueButtonAgency.classList.add('disabled');
+                continueButtonAgency.disabled = true;
+            }
+
+            if (isPasswordValid && isPassword2Valid) {
+                submitButtonAgency.classList.add('active');
+                submitButtonAgency.classList.remove('disabled');
+                submitButtonAgency.disabled = false;
+            } else {
+                submitButtonAgency.classList.remove('active');
+                submitButtonAgency.classList.add('disabled');
+                submitButtonAgency.disabled = true;
+            }
+        }
+
+        [agencyNameInput, agencyPhoneInput, agencyEmailInput, agencyPasswordInput, agencyPassword2Input].forEach(input => {
+            input.addEventListener('input', agencyValidateForm);
+        });
+
+        togglePasswordAgency.addEventListener('click', function() {
+            agencyPasswordInput.type = agencyPasswordInput.type === 'password' ? 'text' : 'password';
+            this.classList.toggle('fa-eye-slash');
+        });
+
+        togglePassword2Agency.addEventListener('click', function() {
+            agencyPassword2Input.type = agencyPassword2Input.type === 'password' ? 'text' : 'password';
+            this.classList.toggle('fa-eye-slash');
+        });
+
+        continueButtonAgency.addEventListener('click', function() {
+            // Скрываем всю форму личной информации
+            document.querySelectorAll('.personal-info').forEach(function(element) {
+                element.style.display = 'none';
+            });
+
+            // Показываем форму для ввода пароля
+            document.querySelectorAll('.password-info').forEach(function(element) {
+                element.style.display = 'block';
+            });
+
+            // Скрываем кнопку "Продолжить"
+            this.style.display = 'none';
+
+            // Показываем кнопку "Завершить регистрацию"
+            submitButtonAgency.style.display = 'block';
+        });
+
+        submitButtonAgency.addEventListener('click', function() {
+            const agencyData = {
+                username: agencyNameInput.value,
+                phoneNumber: agencyPhoneInput.value.replaceAll("\\D", ""), // Remove non-digit characters
+                email: agencyEmailInput.value,
+                password: agencyPasswordInput.value,
+                password2: agencyPassword2Input.value,
+                roleType: 'RECRUITING_COMPANY'
+            };
+
+            fetch('/api/recruiting/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(agencyData)
+            })
+                .then(response => {
+                    if (response.status === 409) {
+                        throw new Error('Пользователь с таким email или номером телефона уже зарегистрирован под этой ролью.');
+                    }
+                    if (!response.ok) {
+                        return response.json().then(err => { throw new Error(err.message || 'Неизвестная ошибка'); });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    alert('Регистрация успешна');
+                    window.location.href = '/personal-info-page';
+                })
+                .catch(error => {
+                    console.error('Ошибка при регистрации:', error);
+                    alert('Произошла ошибка при регистрации: ' + error.message);
+                });
+        });
+
+
+        // Шаг 3 для работодателей - Личные данные
+        const employerNameInput = document.getElementById('employee-name');
+        const employerPhoneInput = document.getElementById('employee-phone');
+        const employerEmailInput = document.getElementById('employee-email');
+        const employerPasswordInput = document.getElementById('password-employee');
+        const employerPassword2Input = document.getElementById('password2-employee');
+        const togglePasswordEmployer = document.getElementById('togglePasswordEmployee');
+        const togglePassword2Employer = document.getElementById('togglePassword2Employee');
+        const continueButtonEmployer = document.getElementById('continue-button-step3-employee');
+        const continueButtonEmployerPassword = document.getElementById('continue-button-step3-employee-password');
+        const submitButtonEmployer = document.getElementById('continue-button-step3-employee-submit');
+        const employerNameError = document.getElementById('employee-name-error');
+        const employerPhoneError = document.getElementById('employee-phone-error');
+        const employerEmailError = document.getElementById('employee-email-error');
+        const employerPasswordError = document.getElementById('password-error-employee');
+        const employerPassword2Error = document.getElementById('password2-error-employee');
+
+
+        function validateEmployerEmail() {
+            const employerEmailValue = employerEmailInput.value.trim();
+            const employerEmailPattern = /^[^\s@]+@[^\s@]+\.[^\с@]+$/;
+            if (employerEmailPattern.test(employerEmailValue)) {
+                employerEmailError.classList.add('hidden');
+                return true;
+            } else {
+                employerEmailError.classList.remove('hidden');
+                return false;
+            }
+        }
+
+        function validateEmployerPassword() {
+            const employerPasswordValue = employerPasswordInput.value.trim();
+            if (employerPasswordValue.length >= 8) {
+                employerPasswordError.classList.add('hidden');
+                return true;
+            } else {
+                employerPasswordError.classList.remove('hidden');
+                return false;
+            }
+        }
+
+        function validateEmployerPassword2() {
+            const employerPasswordValue = employerPasswordInput.value.trim();
+            const employerPassword2Value = employerPassword2Input.value.trim();
+            if (employerPasswordValue === employerPassword2Value) {
+                employerPassword2Error.classList.add('hidden');
+                return true;
+            } else {
+                employerPassword2Error.classList.remove('hidden');
+                return false;
+            }
+        }
+
+        function validateEmployerForm() {
+            const isNameValid = validateEmployerName();
+            const isPhoneValid = validateEmployerPhone();
+            const isEmailValid = validateEmployerEmail();
+            const isPasswordValid = validateEmployerPassword();
+            const isPassword2Valid = validateEmployerPassword2();
+            if (isNameValid && isPhoneValid && isEmailValid && isPasswordValid && isPassword2Valid) {
+                continueButtonEmployer.classList.add('active');
+                continueButtonEmployer.disabled = false;
+            } else {
+                continueButtonEmployer.classList.remove('active');
+                continueButtonEmployer.disabled = true;
+            }
+        }
+
+        employerNameInput.addEventListener('input', validateEmployerForm);
+        employerPhoneInput.addEventListener('input', () => validatePhone(employerPhoneInput, employerPhoneError));
+        employerEmailInput.addEventListener('input', validateEmployerForm);
+        employerPasswordInput.addEventListener('input', validateEmployerForm);
+        employerPassword2Input.addEventListener('input', validateEmployerForm);
+
+        togglePasswordEmployer.addEventListener('click', () => {
+            const type = employerPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            employerPasswordInput.setAttribute('type', type);
+            togglePasswordEmployer.classList.toggle('fa-eye');
+            togglePasswordEmployer.classList.toggle('fa-eye-slash');
+        });
+
+        togglePassword2Employer.addEventListener('click', () => {
+            const type = employerPassword2Input.getAttribute('type') === 'password' ? 'text' : 'password';
+            employerPassword2Input.setAttribute('type', type);
+            togglePassword2Employer.classList.toggle('fa-eye');
+            togglePassword2Employer.classList.toggle('fa-eye-slash');
+        });
+
+        continueButtonEmployer.addEventListener('click', function (event) {
+            event.preventDefault();
+            document.querySelectorAll('#step3-employee .personal-info').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('#step3-employee .password-info').forEach(el => el.classList.remove('hidden'));
+            continueButtonEmployer.classList.add('hidden');
+            continueButtonEmployerPassword.classList.remove('hidden');
+        });
+
+        continueButtonEmployerPassword.addEventListener('click', function (event) {
+            event.preventDefault();
+            document.querySelectorAll('#step3-employee .password-info').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('#step3-employee .company-info').forEach(el => el.classList.remove('hidden'));
+            continueButtonEmployerPassword.classList.add('hidden');
+            submitButtonEmployer.classList.remove('hidden');
+        });
+
+        submitButtonEmployer.addEventListener('click', function (event) {
+            event.preventDefault();
+
+            const employerData = {
+                name: employerNameInput.value,
+                phone: employerPhoneInput.value,
+                email: employerEmailInput.value,
+                password: employerPasswordInput.value,
+                company_name: document.getElementById('company_name').value,
+                company_url: document.getElementById('company_url').value,
+                company_activities: document.getElementById('company_activities').value,
+                type: 'РАБОТОДАТЕЛЬ'
+            };
+
+            fetch('/submit-form', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(employerData)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    alert('Регистрация успешна');
+                    window.location.href = '/personal-info-page';
+                })
+                .catch(error => {
+                    console.error('Ошибка при регистрации:', error);
+                    alert('Произошла ошибка при регистрации');
+                });
+        });
+
+        // Шаг 3 для выпускников - Личные данные
+        const graduateNameInput = document.getElementById('graduate-name');
+        const graduatePhoneInput = document.getElementById('graduate-phone');
+        const graduateEmailInput = document.getElementById('graduate-email');
+        const graduatePasswordInput = document.getElementById('password-graduate');
+        const graduatePassword2Input = document.getElementById('password2-graduate');
+        const togglePasswordGraduate = document.getElementById('togglePasswordGraduate');
+        const togglePassword2Graduate = document.getElementById('togglePassword2Graduate');
+        const continueButtonGraduate = document.getElementById('continue-button-step3-graduate');
+        const continueButtonGraduatePassword = document.getElementById('continue-button-step3-graduate-password');
+        const continueButtonGraduateCertificate = document.getElementById('continue-button-step3-graduate-certificate');
+        const continueButtonGraduatePhoto = document.getElementById('continue-button-step3-graduate-photo');
+        const finishButtonGraduate = document.getElementById('finish-button-step3-graduate');
+        const continueButtonGraduateCertificateMore = document.getElementById('continue-button-step3-graduate-submit');
+        const continueButtonGraduateJob = document.getElementById(' continue-button-step3-graduate-job-type');
+        const profilePhotoInput = document.getElementById('profile-photo');
+        const portfolioFilesInput = document.getElementById('portfolio-files');
+        const graduateNameError = document.getElementById('graduate-name-error');
+        const graduatePhoneError = document.getElementById('graduate-phone-error');
+        const graduateEmailError = document.getElementById('graduate-email-error');
+        const graduatePasswordError = document.getElementById('password-error-graduate');
+        const graduatePassword2Error = document.getElementById('password2-error-graduate');
+        const certificateNumberInput = document.getElementById('certificate_number');
+        const certificateDateInput = document.getElementById('certificate_date');
+        const graduateBirthDateInput = document.getElementById('graduate-birth-date');
+        const graduateBirthDateError = document.getElementById('birth-date-error');
+        const continueButtonGraduateActivity = document.getElementById('continue-button-step3-graduate-activity');
+        const continueButtonGraduateCertificateCount = document.getElementById('continue-button-step3-graduate-certificate-count');
+        graduatePhoneInput.addEventListener('input', function() {
+            formatPhoneNumber(this);
+        });
+
+        function IsBirthDateValid(birthDateInput) {
+            const birthDateValue = birthDateInput.value.trim();
+            if (!birthDateValue) return false;
+
+            const birthDate = new Date(birthDateValue);
+            const today = new Date();
+
+            const age = today.getFullYear() - birthDate.getFullYear();
+            const monthDifference = today.getMonth() - birthDate.getMonth();
+            const dayDifference = today.getDate() - birthDate.getDate();
+
+            const fullAge = monthDifference < 0 || (monthDifference === 0 && dayDifference < 0) ? age - 1 : age;
+
+            return fullAge >= 18 && fullAge <= 150;
+        }
+
+        function validateGraduateForm() {
+            const isNameValid = validateField(graduateNameInput, graduateNameError, /^[\w\sА-яЁё]+$/i);
+            const isEmailValid = validateField(graduateEmailInput, graduateEmailError, /^[^\s@]+@[^\s@]+\.[^\с@]+$/);
+            const isPhoneValid = validatePhone(graduatePhoneInput, graduatePhoneError);
+            const isPasswordValid = validateField(graduatePasswordInput, graduatePasswordError, /.{4,}/);
+            const isPassword2Valid = graduatePasswordInput.value === graduatePassword2Input.value;
+            const isCertificateNumber = certificateNumberInput.value.trim().length === 6 && /^\d+$/.test(certificateNumberInput.value.trim());
+            const isCertificateDate = certificateDateInput.value.trim() !== '';
+            const isBirthDateValid = IsBirthDateValid(graduateBirthDateInput);
+
+
+
+            console.log("Validation Status:", isNameValid, isEmailValid, isPhoneValid, isBirthDateValid);
+
+            if (isPassword2Valid) {
+                graduatePassword2Error.classList.add('hidden');
+            } else {
+                graduatePassword2Error.classList.remove('hidden');
+            }
+
+            if (isBirthDateValid) {
+                graduateBirthDateError.classList.add('hidden');
+            } else {
+                graduateBirthDateError.classList.remove('hidden');
+            }
+
+            if (isNameValid && isEmailValid && isPhoneValid && isBirthDateValid) {
+                continueButtonGraduate.classList.add('active');
+                continueButtonGraduate.classList.remove('disabled');
+                continueButtonGraduate.disabled = false;
+            } else {
+                continueButtonGraduate.classList.remove('active');
+                continueButtonGraduate.classList.add('disabled');
+                continueButtonGraduate.disabled = true;
+            }
+
+            if (isPasswordValid && isPassword2Valid) {
+                continueButtonGraduatePassword.classList.add('active');
+                continueButtonGraduatePassword.classList.remove('disabled');
+                continueButtonGraduatePassword.disabled = false;
+            } else {
+                continueButtonGraduatePassword.classList.remove('active');
+                continueButtonGraduatePassword.classList.add('disabled');
+                continueButtonGraduatePassword.disabled = true;
+            }
+
+            if (isCertificateNumber && isCertificateDate) {
+                continueButtonGraduateCertificate.classList.add('active');
+                continueButtonGraduateCertificate.classList.remove('disabled');
+                continueButtonGraduateCertificate.disabled = false;
+            } else {
+                continueButtonGraduateCertificate.classList.remove('active');
+                continueButtonGraduateCertificate.classList.add('disabled');
+                continueButtonGraduateCertificate.disabled = true;
+            }
+        }
+
+        [graduateNameInput, graduatePhoneInput, graduateEmailInput, graduatePasswordInput, graduatePassword2Input, certificateNumberInput, certificateDateInput, graduateBirthDateInput].forEach(input => {
+            input.addEventListener('input', validateGraduateForm);
+        });
+
+        togglePasswordGraduate.addEventListener('click', () => {
+            const type = graduatePasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            graduatePasswordInput.setAttribute('type', type);
+            togglePasswordGraduate.classList.toggle('fa-eye');
+            togglePasswordGraduate.classList.toggle('fa-eye-slash');
+        });
+
+        togglePassword2Graduate.addEventListener('click', () => {
+            const type = graduatePassword2Input.getAttribute('type') === 'password' ? 'text' : 'password';
+            graduatePassword2Input.setAttribute('type', type);
+            togglePassword2Graduate.classList.toggle('fa-eye');
+            togglePassword2Graduate.classList.toggle('fa-eye-slash');
+        });
+
+        continueButtonGraduate.addEventListener('click', function (event) {
+            document.querySelectorAll('.personal-info').forEach(function(element) {
+                element.style.display = 'none';
+            });
+
+            // Показываем форму для ввода пароля
+            document.querySelectorAll('.certificate-info').forEach(function(element) {
+                element.style.display = 'block';
+            });
+
+            // Скрываем кнопку "Продолжить"
+            this.style.display = 'none';
+
+            // Показываем кнопку "Завершить регистрацию"
+            continueButtonGraduateCertificateCount.style.display = 'block';
+        });
+
+
+        continueButtonGraduateCertificateCount.addEventListener('click', function (event) {
+            document.querySelectorAll('.certificate-info').forEach(function(element) {
+                element.style.display = 'none';
+            });
+            step3Buttons.forEach(button => {
+                button.addEventListener('click', function () {
+                    // Проверяем, является ли текущая кнопка 'ONE' или 'MORE'
+                    if (this.id === 'ONE' || this.id === 'MORE') {
+                        // Удаляем класс 'active' и добавляем класс 'inactive' для всех кнопок
+                        step1Buttons.forEach(btn => {
+                            btn.classList.remove('active');
+                            btn.classList.add('inactive');
+                        });
+                        // Добавляем класс 'active' и удаляем класс 'inactive' только для текущей кнопки
+                        this.classList.add('active');
+                        this.classList.remove('inactive');
+
+                        // Устанавливаем выбранную роль в поле ввода
+                        selectedRole = this.getAttribute('data-value');
+                        roleInput.value = selectedRole;
+
+                        // Активируем кнопку "Продолжить" и делаем её доступной для нажатия
+                        continueButtonGraduateCertificateCount.classList.add('active');
+                        continueButtonGraduateCertificateCount.disabled = false;
+                    } else {
+                        if (this.id === 'MORE'){
+                            document.querySelectorAll('.new-skill-info').forEach(function(element) {
+                                element.style.display = 'block';
+                            });
+
+                            // Скрываем кнопку "Продолжить"
+                            this.style.display = 'none';
+
+                            // Показываем кнопку "Завершить регистрацию"
+                            continueButtonGraduateCertificateMore.style.display = 'block';
+
+                        }
+                        if (this.id === 'ONE'){
+                            document.querySelectorAll('.skills-info').forEach(function(element) {
+                                element.style.display = 'block';
+                            });
+
+                        // Скрываем кнопку "Продолжить"
+                        this.style.display = 'none';
+
+                        // Показываем кнопку "Завершить регистрацию"
+                        continueButtonGraduateCertificate.style.display = 'block';
+                        }
+                    }
+                });
+            });
+
+        });
+
+        continueButtonGraduateCertificate.addEventListener('click', function (event) {
+            document.querySelectorAll('.skills-info').forEach(function(element) {
+                element.style.display = 'none';
+            });
+
+            // Показываем форму для ввода пароля
+            document.querySelectorAll('.worktype-info').forEach(function(element) {
+                element.style.display = 'block';
+            });
+
+            // Скрываем кнопку "Продолжить"
+            this.style.display = 'none';
+
+            continueButtonGraduateCertificateMore.style.display = 'block';
+        });
+
+        continueButtonGraduateCertificateMore.addEventListener('click', function (event) {
+            document.querySelectorAll('.new-skill-info').forEach(function(element) {
+                element.style.display = 'none';
+            });
+
+            // Показываем форму для ввода пароля
+            document.querySelectorAll('.worktype-info').forEach(function(element) {
+                element.style.display = 'block';
+            });
+
+            // Скрываем кнопку "Продолжить"
+            this.style.display = 'none';
+
+            // Показываем кнопку "Завершить регистрацию"
+            continueButtonGraduateJob.style.display = 'block';
+        });
+
+        if (continueButtonGraduateJob) {
+            continueButtonGraduateJob.addEventListener('click', function(event) {
+                document.querySelectorAll('.worktype-info').forEach(function(element) {
+                    element.style.display = 'none';
+                });
+
+                // Показываем форму для ввода статуса поиска
+                document.querySelectorAll('.activity-info').forEach(function(element) {
+                    element.style.display = 'block';
+                });
+
+                // Скрываем кнопку "Продолжить"
+                this.style.display = 'none';
+
+                // Показываем кнопку "Далее"
+                if (continueButtonGraduateActivity) {
+                    continueButtonGraduateActivity.style.display = 'block';
+                }
+            });
+        }
+
+        continueButtonGraduateActivity.addEventListener('click', function (event) {
+            document.querySelectorAll('.activity-info').forEach(function(element) {
+                element.style.display = 'none';
+            });
+
+            // Показываем форму для ввода пароля
+            document.querySelectorAll('.photo-info').forEach(function(element) {
+                element.style.display = 'block';
+            });
+
+            // Скрываем кнопку "Продолжить"
+            this.style.display = 'none';
+
+            // Показываем кнопку "Завершить регистрацию"
+            continueButtonGraduatePhoto.style.display = 'block';
+        });
+
+        continueButtonGraduatePhoto.addEventListener('click', function (event) {
+            document.querySelectorAll('.photo-info').forEach(function(element) {
+                element.style.display = 'none';
+            });
+
+            // Показываем форму для ввода пароля
+            document.querySelectorAll('.portfolio-info').forEach(function(element) {
+                element.style.display = 'block';
+            });
+
+            // Скрываем кнопку "Продолжить"
+            this.style.display = 'none';
+
+            // Показываем кнопку "Завершить регистрацию"
+            finishButtonGraduate.style.display = 'block';
+        });
+
+        finishButtonGraduate.addEventListener('click', function (event) {
+            event.preventDefault();
+
+            const graduateData = {
+                username: graduateNameInput.value,
+                phoneNumber: graduatePhoneInput.value,
+                email: graduateEmailInput.value,
+                password: graduatePasswordInput.value,
+                birthDate: graduateBirthDateInput.value,
+                certificateNumber: certificateNumberInput.value,
+                certificateDate: certificateDateInput.value,
+                photo: profilePhotoInput.files[0] ? profilePhotoInput.files[0] : null,
+                portfolioFiles: Array.from(portfolioFilesInput.files)
+            };
+
+            const formData = new FormData();
+            for (const key in graduateData) {
+                if (graduateData.hasOwnProperty(key)) {
+                    if (Array.isArray(graduateData[key])) {
+                        graduateData[key].forEach((file, index) => {
+                            formData.append(`${key}[${index}]`, file);
+                        });
+                    } else {
+                        formData.append(key, graduateData[key]);
+                    }
+                }
+            }
+
+            fetch('/submit-form', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    alert('Регистрация успешна');
+                    window.location.href = '/personal-info-page';
+                })
+                .catch(error => {
+                    console.error('Ошибка при регистрации:', error);
+                    alert('Произошла ошибка при регистрации');
+                });
+        });
+    });
+</script>
+
+</body>
+</html>

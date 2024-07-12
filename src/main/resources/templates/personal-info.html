@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Личный кабинет</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #FF6600;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #333;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .phone-icon {
+            font-size: 20px;
+            color: #FF6600;
+            text-decoration: none;
+        }
+
+        .username {
+            color: #333;
+            text-decoration: none;
+        }
+
+        main {
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .info-cards {
+            display: flex;
+            justify-content: space-around;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            background-color: #f4f4f4;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            flex: 1 1 200px;
+            margin-bottom: 20px;
+        }
+
+        .card img {
+            max-width: 100px;
+            border-radius: 50%;
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #FF6600;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .ads {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: space-between;
+        }
+
+        .ad {
+            background-color: #f4f4f4;
+            padding: 20px;
+            border-radius: 8px;
+            flex: 1 1 200px;
+        }
+
+        .ad .order {
+            background-color: #FF6600;
+            color: #fff;
+            padding: 5px;
+            border-radius: 3px;
+            display: inline-block;
+        }
+
+        .ad .price {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .ad .description {
+            margin-top: 10px;
+        }
+
+        .search-link {
+            display: block;
+            text-align: right;
+            margin-top: 20px;
+            color: #FF6600;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div class="logo">JOLTAP</div>
+    <nav>
+        <ul>
+            <li><a href="#">Для работодателей</a></li>
+            <li><a href="#">Для выпускников</a></li>
+            <li><a href="#">Вопрос-ответ</a></li>
+            <li><a href="#">Оставить отзыв</a></li>
+        </ul>
+    </nav>
+    <div class="user-info">
+        <a href="#" class="phone-icon">📞</a>
+        <a href="#" class="username"></a>
+    </div>
+</header>
+<main>
+    <h1>Добро пожаловать, <span class="username"></span></h1>
+    <div id="info-cards" class="info-cards"></div>
+    <h2>Актуальные объявления</h2>
+    <div class="ads">
+        <div class="ad">
+            <p class="order">ЗАКАЗ</p>
+            <p class="price">27 000 ₸</p>
+            <p class="description">Таргетолог Нужно запустить рекламу в Instagram для магазина спортивной ...</p>
+        </div>
+        <div class="ad">
+            <p class="order">ЗАКАЗ</p>
+            <p class="price">26 000 ₸</p>
+            <p class="description">Таргетолог Нужно запустить рекламу в Instagram для магазина спортивной ...</p>
+        </div>
+        <div class="ad">
+            <p class="order">ЗАКАЗ</p>
+                <p class="price">25 000 ₸</p>
+                <p class="description">Таргетолог Нужно запустить рекламу в Instagram для магазина спортивной ...</p>
+        </div>
+        <!-- More ads here -->
+    </div>
+    <a href="#" class="search-link">Перейти к поиску</a>
+</main>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        fetch('/api/users/current_user')
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                    window.location.href = '/login';
+                } else {
+                    document.querySelector(".username").textContent = data.username;
+                    loadUserContent(data);
+                }
+            })
+            .catch(error => console.error('Error fetching current user:', error));
+    });
+
+    function loadUserContent(data) {
+        const role = data.role;
+        const infoCards = document.getElementById('info-cards');
+        if (role === 'GRADUATE') {
+            infoCards.innerHTML = `
+                <div class="card">
+                    <h2>Персональная информация</h2>
+                    <p>${data.name}</p>
+                    <p>${data.phoneNumber}</p>
+                    <p>${data.email}</p>
+                    <button>Редактировать</button>
+                </div>
+                <div class="card">
+                    <h2>Фотография</h2>
+                    <img src="${data.photo}" alt="Profile Photo">
+                    <button>Изменить</button>
+                </div>
+                <div class="card">
+                    <h2>Ваши сертификаты</h2>
+                    <p>${data.certificateNumber}</p>
+                    <p>${data.certificateDate}</p>
+                    <button>Редактировать</button>
+                </div>
+                <div class="card">
+                    <h2>Ваше портфолио</h2>
+                    <img src="${data.portfolio}" alt="Portfolio Photo">
+                    <button>Изменить</button>
+                </div>
+            `;
+        } else if (role === 'EMPLOYER' || role === 'RECRUITING_COMPANY') {
+            infoCards.innerHTML = `
+                <div class="card">
+                    <h2>Персональная информация</h2>
+                    <p>${data.username}</p>
+                    <p>${data.phoneNumber}</p>
+                    <p>${data.email}</p>
+                    <button>Редактировать</button>
+                </div>
+                <div class="card">
+                    <h2>Информация о компании</h2>
+                    <p>${data.companyName}</p>
+                    <p><a href="${data.companyUrl}" target="_blank">${data.companyUrl}</a></p>
+                    <p>${data.companyActivities}</p>
+                    <button>Редактировать</button>
+                </div>
+                <div class="card">
+                    <h2>Мои объявления</h2>
+                    <p>Ищу таргетолога ...</p>
+                    <p>Ищу SMM-специалиста ...</p>
+                    <button>Редактировать</button>
+                </div>
+                <div class="card">
+                    <h2>Избранные</h2>
+                    <p>${user.username}</p>
+                    <button>Редактировать</button>
+                </div>
+            `;
+        }
+    }
+</script>
+</body>
+</html>

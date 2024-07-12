@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JOLTAP - Профиль</title>
+  <link rel="icon" href="/images/logo Joltap.png" type="image/png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #fff;
+    }
+    header {
+      width: 100%;
+      background-color: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    header img.logo {
+      width: 100px;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      margin: 0;
+      padding: 0;
+    }
+    nav li {
+      margin: 0 20px;
+    }
+    nav a {
+      text-decoration: none;
+      color: #333;
+      font-size: 16px;
+      font-weight: 400;
+    }
+    nav a.active {
+      font-weight: 700;
+      border-bottom: 2px solid #f36706;
+    }
+    .phone {
+      display: flex;
+      align-items: center;
+    }
+    .phone a {
+      text-decoration: none;
+      color: #fff;
+      background-color: #f36706;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 400;
+      display: flex;
+      align-items: center;
+    }
+    .profile-container {
+      display: flex;
+      justify-content: space-between;
+      padding: 20px;
+    }
+    .profile-card, .portfolio-card {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      width: 48%;
+    }
+    .profile-card img {
+      border-radius: 50%;
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+    }
+    .profile-card h2 {
+      margin: 10px 0;
+    }
+    .profile-card .badge {
+      background-color: #f36706;
+      color: #fff;
+      padding: 5px 10px;
+      border-radius: 5px;
+      font-size: 12px;
+      display: inline-block;
+    }
+    .profile-card .button {
+      background-color: #f36706;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: 20px;
+      display: inline-block;
+    }
+    .portfolio-card h2 {
+      margin-bottom: 20px;
+    }
+    .portfolio-card img {
+      width: calc(50% - 10px);
+      margin: 5px;
+      border-radius: 10px;
+    }
+    .similar-executors {
+      margin: 20px 0;
+      padding: 20px;
+    }
+    .similar-executors h2 {
+      margin-bottom: 20px;
+    }
+    .executor-card {
+      background-color: #fff;
+      padding: 10px;
+      border-radius: 10px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      display: inline-block;
+      width: calc(20% - 10px);
+      margin: 5px;
+      text-align: center;
+    }
+    .executor-card .badge {
+      background-color: #f36706;
+      color: #fff;
+      padding: 3px 7px;
+      border-radius: 5px;
+      font-size: 12px;
+      display: inline-block;
+    }
+    .return-link {
+      color: #f36706;
+      text-decoration: none;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="logo">
+    <img src="/images/logo Joltap.png" alt="JOLTAP Logo">
+  </div>
+  <nav>
+    <ul>
+      <li><a href="#employers" class="active">Для работодателей</a></li>
+      <li><a href="#graduates">Для выпускников</a></li>
+      <li><a href="#qa">Вопрос-ответ</a></li>
+      <li><a href="#feedback">Оставить отзыв</a></li>
+    </ul>
+  </nav>
+  <div class="phone">
+    <a href="tel:+77072213131">
+      <span class="fa fa-phone"></span> +7 707 221-31-31
+    </a>
+  </div>
+  <a href="#" class="login">Вход</a>
+</header>
+<div class="profile-container">
+  <div class="profile-card">
+    <img class="profile-image" src="/profile-photos/default.jpg" alt="Profile Picture">
+    <h2 class="username">Имя пользователя</h2>
+    <div class="badge">Рейтинг</div>
+    <p class="employment-status">Статус занятости</p>
+    <h3 class="specialties">Специальности</h3>
+    <p><i class="fas fa-check-circle"></i> Подтвержденный сертификат</p>
+    <button class="button"><i class="fab fa-whatsapp"></i> Связаться</button>
+  </div>
+  <div class="portfolio-card">
+    <h2>Портфолио</h2>
+    <div>
+      <img src="/portfolio-images/default.jpg" alt="Portfolio Image">
+    </div>
+  </div>
+</div>
+<div class="similar-executors">
+  <h2>Похожие исполнители</h2>
+  <div>
+    <div class="executor-card">
+      <h3>Имя пользователя</h3>
+      <div class="badge">Рейтинг</div>
+      <p>Специальности</p>
+      <p>и еще направления</p>
+    </div>
+  </div>
+</div>
+<div style="text-align: right; padding: 20px;">
+  <a href="#" class="return-link">Вернуться к поиску</a>
+</div>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const userId = window.location.pathname.split('/').pop();
+    console.log('Extracted user ID:', userId);
+
+    if (!/^\d+$/.test(userId)) {
+      console.error('Invalid user ID:', userId);
+      return;
+    }
+
+    function createWhatsAppLink(phoneNumber) {
+      return `https://api.whatsapp.com/send/?phone=${phoneNumber}&text=&type=phone_number&app_absent=0`;
+    }
+
+    fetch(`/api/users/${userId}`)
+            .then(response => {
+              if (!response.ok) {
+                throw new Error(`Network response was not ok. Status: ${response.status}`);
+              }
+              return response.json();
+            })
+            .then(user => {
+              console.log('User data received:', user);
+
+              const usernameElement = document.querySelector('.profile-card .username');
+              if (usernameElement) {
+                usernameElement.textContent = user.username;
+              }
+
+              const profileImg = document.querySelector('.profile-card img');
+              if (profileImg) {
+                profileImg.src = user.photoPath ? user.photoPath : '/profile-photos/default.jpg';
+              }
+
+              const badgeElement = document.querySelector('.profile-card .badge');
+              if (badgeElement && user.rating) {
+                badgeElement.innerHTML = `${user.rating} <i class="fas fa-star"></i>`;
+              }
+
+              const employmentStatusElement = document.querySelector('.profile-card .employment-status');
+              if (employmentStatusElement && user.employmentStatuses) {
+                employmentStatusElement.textContent = user.employmentStatuses.join(', ');
+              }
+
+              const specialtiesElement = document.querySelector('.profile-card .specialties');
+              if (specialtiesElement && user.specialties) {
+                specialtiesElement.textContent = user.specialties.join(', ');
+              }
+
+              const portfolioContainer = document.querySelector('.portfolio-card');
+              if (portfolioContainer) {
+                portfolioContainer.innerHTML = '<h2>Портфолио</h2>';
+                if (user.portfolio && user.portfolio.length > 0) {
+                  user.portfolio.forEach(imagePath => {
+                    const img = document.createElement('img');
+                    img.src = imagePath;
+                    img.alt = 'Portfolio Image';
+                    portfolioContainer.appendChild(img);
+                  });
+                } else {
+                  portfolioContainer.innerHTML += '<p>Нет элементов портфолио.</p>';
+                }
+              }
+
+              // Обработчик клика для кнопки "Связаться"
+              const whatsappButton = document.querySelector('.button');
+              if (whatsappButton) {
+                whatsappButton.addEventListener('click', function() {
+                  if (user.phoneNumber) {
+                    const phoneNumber = user.phoneNumber.replace(/^\+/, ''); // Убираем первый плюс
+                    const whatsappLink = createWhatsAppLink(phoneNumber);
+                    window.location.href = whatsappLink;
+                  } else {
+                    console.error('Phone number not found.');
+                  }
+                });
+              }
+
+              // Запрос на получение похожих пользователей
+              if (user.specialties && user.specialties.length > 0) {
+                fetch(`/api/users/similar?specialty=${user.specialties[0]}`)
+                        .then(response => {
+                          if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                          }
+                          return response.json();
+                        })
+                        .then(similarUsers => {
+                          const similarExecutorsContainer = document.querySelector('.similar-executors');
+                          if (similarExecutorsContainer) {
+                            similarUsers.forEach(similarUser => {
+                              const card = document.createElement('div');
+                              card.className = 'executor-card';
+                              card.innerHTML = `
+                  <h3>${similarUser.username}</h3>
+                  <div class="badge">${similarUser.rating} <i class="fas fa-star"></i></div>
+                  <p>${similarUser.specialties.join(', ')}</p>
+                  <p>и еще ${similarUser.specialties.length - 1} направления</p>
+                `;
+                              similarExecutorsContainer.appendChild(card);
+                            });
+                          }
+                        })
+                        .catch(error => {
+                          console.error('Error fetching similar users data:', error);
+                        });
+              }
+            })
+            .catch(error => {
+              console.error('Error fetching user data:', error);
+            });
+  });
+</script>
+</body>
+</html>
