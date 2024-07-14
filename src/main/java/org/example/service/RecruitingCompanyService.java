@@ -1,45 +1,46 @@
 package org.example.service;
 
+import org.example.DTO.RecruitingCompanyRegistrationDTO;
 import org.example.enumerate.RoleType;
-import org.example.model.RecruitingCompany;
-import org.example.repository.RecruitingCompanyRepository;
+import org.example.model.Role;
+import org.example.model.User;
+import org.example.repository.UserRepository;
+import org.example.util.PhoneNumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class RecruitingCompanyService {
 
     @Autowired
-    private RecruitingCompanyRepository recruitingCompanyRepository;
+    private UserRepository userRepository;
 
-    public List<RecruitingCompany> findAll() {
-        return recruitingCompanyRepository.findAll();
+    @Autowired
+    private RoleService roleService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    public void registerWithRole(RecruitingCompanyRegistrationDTO registrationDTO, RoleType roleType) {
+        Role role = roleService.findByType(roleType);
+
+        User newUser = new User();
+        newUser.setUsername(registrationDTO.getUsername());
+        newUser.setEmail(registrationDTO.getEmail());
+        // Гарантируем, что номер телефона форматирован правильно перед сохранением
+        newUser.setPhoneNumber(PhoneNumberUtils.formatPhoneNumber(registrationDTO.getPhoneNumber()));
+        newUser.setPassword(passwordEncoder.encode(registrationDTO.getPassword()));
+        newUser.addRole(role);
+
+        userRepository.save(newUser);
     }
 
-    public Optional<RecruitingCompany> findById(Long id) {
-        return recruitingCompanyRepository.findById(id);
+    public boolean existsByEmailAndRole(String email, RoleType type) {
+        return userRepository.existsByEmailAndRoles_Type(email, type);
     }
 
-    @Transactional
-    public RecruitingCompany save(RecruitingCompany recruitingCompany) {
-        return recruitingCompanyRepository.save(recruitingCompany);
-    }
-
-    @Transactional(readOnly = true)
-    public boolean existsByEmailAndRole(String email, RoleType roleType) {
-        return recruitingCompanyRepository.existsByEmailAndRoleType(email, roleType);
-    }
-
-    @Transactional(readOnly = true)
-    public boolean existsByPhoneNumberAndRole(String phoneNumber, RoleType roleType) {
-        return recruitingCompanyRepository.existsByPhoneNumberAndRoleType(phoneNumber, roleType);
-    }
-
-    public void deleteById(Long id) {
-        recruitingCompanyRepository.deleteById(id);
+    public boolean existsByPhoneNumberAndRole(String phoneNumber, RoleType type) {
+        return userRepository.existsByPhoneNumberAndRoles_Type(phoneNumber, type);
     }
 }

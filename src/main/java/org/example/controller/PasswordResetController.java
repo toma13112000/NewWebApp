@@ -8,11 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Map;
@@ -30,9 +27,6 @@ public class PasswordResetController {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
     @GetMapping
     public String showResetPage() {
         logger.info("Отображение страницы сброса пароля");
@@ -42,20 +36,14 @@ public class PasswordResetController {
     @GetMapping("/check-user")
     public ResponseEntity<Map<String, Boolean>> checkUser(@RequestParam String phoneNumber) {
         logger.info("Проверка существования пользователя для номера: {}", phoneNumber);
-        try {
-            phoneNumber = normalizePhoneNumber(phoneNumber);
-            Optional<User> userOpt = userRepository.findByPhoneNumber(phoneNumber);
+        Optional<User> userOpt = userRepository.findByPhoneNumber(phoneNumber);
 
-            if (userOpt.isPresent()) {
-                logger.info("Пользователь найден для номера: {}", phoneNumber);
-                return ResponseEntity.ok(Map.of("exists", true));
-            } else {
-                logger.warn("Пользователь не найден для номера: {}", phoneNumber);
-                return ResponseEntity.ok(Map.of("exists", false));
-            }
-        } catch (Exception e) {
-            logger.error("Ошибка при проверке пользователя", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("exists", false));
+        if (userOpt.isPresent()) {
+            logger.info("Пользователь найден для номера: {}", phoneNumber);
+            return ResponseEntity.ok(Map.of("exists", true));
+        } else {
+            logger.warn("Пользователь не найден для номера: {}", phoneNumber);
+            return ResponseEntity.ok(Map.of("exists", false));
         }
     }
 
@@ -63,12 +51,11 @@ public class PasswordResetController {
     public ResponseEntity<ApiResponse> resetPassword(@RequestBody PhoneRequest phoneRequest, HttpSession session) {
         logger.info("Получен запрос на сброс пароля для номера: {}", phoneRequest.getPhone());
         try {
-            String phoneNumber = normalizePhoneNumber(phoneRequest.getPhone());
+            String phoneNumber = phoneRequest.getPhone();
             logger.info("Нормализованный номер телефона: {}", phoneNumber);
 
             Optional<User> userOpt = userRepository.findByPhoneNumber(phoneNumber);
             if (userOpt.isPresent()) {
-                logger.info("Пользователь найден для номера: {}", phoneNumber);
                 String verificationCode = smsService.sendVerificationCode(phoneNumber);
                 session.setAttribute("verificationCode", verificationCode);
                 session.setAttribute("phone", phoneNumber);
@@ -80,16 +67,7 @@ public class PasswordResetController {
         } catch (IOException e) {
             logger.error("Ошибка при отправке СМС", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(false, "Ошибка при отправке СМС. Пожалуйста, попробуйте позже."));
-        } catch (Exception e) {
-            logger.error("Внутренняя ошибка сервера", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(false, "Внутренняя ошибка сервера. Пожалуйста, попробуйте позже."));
         }
-    }
-
-    @GetMapping("/confirm")
-    public String showConfirmPage(@RequestParam String phone) {
-        logger.info("Отображение страницы подтверждения для номера: {}", phone);
-        return "confirm"; // Имя HTML-шаблона для страницы подтверждения
     }
 
     @PostMapping("/confirm")
@@ -98,7 +76,7 @@ public class PasswordResetController {
         String storedCode = (String) session.getAttribute("verificationCode");
 
         if (phone != null && storedCode != null && storedCode.equals(codeRequest.getCode())) {
-            session.removeAttribute("verificationCode");
+            session.removeAttribute("verificationCode"); // Очистить код после успешного подтверждения
             return ResponseEntity.ok(new ApiResponse(true, "Код подтвержден"));
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(false, "Неверный код подтверждения"));
@@ -110,14 +88,12 @@ public class PasswordResetController {
         String phone = (String) session.getAttribute("phone");
 
         if (phone != null) {
-            phone = normalizePhoneNumber(phone); // Нормализация номера телефона
             Optional<User> userOpt = userRepository.findByPhoneNumber(phone);
             if (userOpt.isPresent()) {
                 User user = userOpt.get();
-                String encodedPassword = passwordEncoder.encode(passwordRequest.getNewPassword());
-                user.setPassword(encodedPassword);
+                user.setPassword(passwordRequest.getNewPassword());
                 userRepository.save(user);
-                session.removeAttribute("phone");
+                session.removeAttribute("phone"); // Очистить телефон после успешного изменения пароля
                 return ResponseEntity.ok(new ApiResponse(true, "Пароль успешно изменен"));
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(false, "Пользователь не найден"));
@@ -125,10 +101,6 @@ public class PasswordResetController {
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiResponse(false, "Неавторизованный запрос"));
         }
-    }
-
-    private String normalizePhoneNumber(String phoneNumber) {
-        return phoneNumber;
     }
 
     public static class PhoneRequest {

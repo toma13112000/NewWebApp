@@ -1,7 +1,5 @@
 package org.example.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -23,7 +21,6 @@ import java.util.stream.Collectors;
 })
 @Data
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "user_type")
 @EqualsAndHashCode(of = {"username", "email"}, callSuper = false)
 @ToString(of = {"id", "username", "email"})
 public class User implements UserDetails {
@@ -34,6 +31,9 @@ public class User implements UserDetails {
 
     @Column(nullable = false, unique = true, length = 191)
     private String username;
+
+    @Column(name = "role_type")
+    private String roleType;
 
     @Column(nullable = false, unique = true, length = 191)
     private String email;
@@ -50,14 +50,10 @@ public class User implements UserDetails {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-
     private Set<Role> roles = new HashSet<>();
 
     @Column(name = "last_login_role", length = 50)
     private String lastLoginRole;
-
-    @Column(name = "photo_path")
-    private String photoPath;
 
     // Methods to manage roles
     public void addRole(Role role) {

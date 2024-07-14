@@ -2,25 +2,34 @@ package org.example.controller;
 
 import org.example.DTO.RecruitingCompanyRegistrationDTO;
 import org.example.enumerate.RoleType;
-import org.example.model.RecruitingCompany;
 import org.example.model.Role;
+import org.example.model.User;
 import org.example.service.RecruitingCompanyService;
 import org.example.service.RoleService;
+import org.example.util.PhoneNumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
+import org.example.repository.UserRepository;
 import javax.validation.Valid;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/recruiting")
 public class RecruitingCompanyController {
 
     private static final Logger logger = LoggerFactory.getLogger(RecruitingCompanyController.class);
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private RecruitingCompanyService recruitingCompanyService;
@@ -40,30 +49,45 @@ public class RecruitingCompanyController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Passwords do not match");
         }
 
-        RecruitingCompany recruitingCompany = new RecruitingCompany();
-        recruitingCompany.setUsername(registrationDTO.getUsername());
-        recruitingCompany.setEmail(registrationDTO.getEmail());
-        recruitingCompany.setPhoneNumber(registrationDTO.getPhoneNumber().replaceAll("\\D", ""));
-        recruitingCompany.setPassword(registrationDTO.getPassword());
-        recruitingCompany.setRoleType(registrationDTO.getRoleType());
+        String cleanedPhoneNumber = PhoneNumberUtils.formatPhoneNumber(registrationDTO.getPhoneNumber());
+        logger.info("Cleaned phone number: {}", cleanedPhoneNumber);
 
-        // Назначение роли RECRUITING_COMPANY
-        Role role = roleService.findByType(RoleType.RECRUITING_COMPANY);
-        if (role != null) {
-            recruitingCompany.addRole(role);
-        } else {
-            logger.error("Role RECRUITING_COMPANY not found");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Role RECRUITING_COMPANY not found");
+        boolean phoneExists = recruitingCompanyService.existsByPhoneNumberAndRole(cleanedPhoneNumber, RoleType.RECRUITING_COMPANY);
+        boolean emailExists = recruitingCompanyService.existsByEmailAndRole(registrationDTO.getEmail(), RoleType.RECRUITING_COMPANY);
+        logger.info("Phone exists: {}", phoneExists);
+        logger.info("Email exists: {}", emailExists);
+
+        if (emailExists) {
+            logger.error("Email already exists for this role");
+            return ResponseEntity.badRequest().body("Email already exists for this role");
+        } else if (phoneExists) {
+            logger.error("Phone number already exists for this role");
+            return ResponseEntity.badRequest().body("Phone number already exists for this role");
         }
 
         try {
-            logger.info("Saving recruiting company: {}", recruitingCompany);
-            RecruitingCompany savedRecruitingCompany = recruitingCompanyService.save(recruitingCompany);
-            logger.info("Successfully registered new recruiting company: {}", savedRecruitingCompany);
-            return ResponseEntity.ok(savedRecruitingCompany);
+            registrationDTO.setPhoneNumber(cleanedPhoneNumber);
+            recruitingCompanyService.registerWithRole(registrationDTO, RoleType.RECRUITING_COMPANY);
+            logger.info("User registered successfully");
+            return ResponseEntity.ok("User registered successfully");
         } catch (Exception e) {
-            logger.error("Error saving recruiting company", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error saving recruiting company: " + e.getMessage());
+            logger.error("Error while registering user", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while registering the user");
+        }
+    }
+    @GetMapping("/check-user")
+    public ResponseEntity<?> checkUser(@RequestParam String phoneNumber, @RequestParam String email) {
+        try {
+            String cleanedPhoneNumber = PhoneNumberUtils.formatPhoneNumber(phoneNumber);
+
+            boolean phoneExists = recruitingCompanyService.existsByPhoneNumberAndRole(cleanedPhoneNumber, RoleType.RECRUITING_COMPANY);
+            boolean emailExists = recruitingCompanyService.existsByEmailAndRole(email, RoleType.RECRUITING_COMPANY);
+
+            return ResponseEntity.ok().body(Map.of(
+                    "phoneExists", phoneExists,
+                    "emailExists", emailExists));
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("success", false, "message", "An error occurred"));
         }
     }
 }

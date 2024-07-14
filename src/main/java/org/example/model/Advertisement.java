@@ -22,6 +22,9 @@ public class Advertisement {
     @JoinColumn(name = "employer_id")
     private Employer employer;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "recruiting_company_id")
+    private RecruitingCompany recruitingCompany;
     // Конструкторы
     public Advertisement() {}
 
@@ -115,5 +118,13 @@ public class Advertisement {
 
     public void setEmployer(Employer employer) {
         this.employer = employer;
+    }
+
+    public RecruitingCompany getRecruitingCompany() {
+        return recruitingCompany;
+    }
+
+    public void setRecruitingCompany(RecruitingCompany recruitingCompany) {
+        this.recruitingCompany = recruitingCompany;
     }
 }

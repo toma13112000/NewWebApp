@@ -51,12 +51,12 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public boolean existsByEmailAndRole(String email, RoleType roleType) {
-        return userRepository.existsByEmailAndRolesContaining(email, roleType.name());
+        return userRepository.existsByEmailAndRoles_Type(email, roleType);
     }
 
     @Transactional(readOnly = true)
     public boolean existsByPhoneNumberAndRole(String phoneNumber, RoleType roleType) {
-        return userRepository.existsByPhoneNumberAndRolesContaining(phoneNumber, roleType.name());
+        return userRepository.existsByPhoneNumberAndRoles_Type(phoneNumber, roleType);
     }
 
     @Transactional
@@ -104,7 +104,7 @@ public class UserService {
         recruitingCompany.setEmail(registrationDTO.getEmail());
         recruitingCompany.setPhoneNumber(registrationDTO.getPhoneNumber().replaceAll("\\D", ""));
         recruitingCompany.setPassword(passwordEncoder.encode(registrationDTO.getPassword()));
-        recruitingCompany.setRoleType(RoleType.RECRUITING_COMPANY);
+        recruitingCompany.setRoleType(String.valueOf(RoleType.RECRUITING_COMPANY)); // This will call addRole internally
 
         return recruitingCompanyRepository.save(recruitingCompany);
     }
@@ -183,8 +183,7 @@ public class UserService {
 
         Employer employer = new Employer();
         employer.setEmail(registrationDTO.getEmail());
-        employer
-                .setPassword(passwordEncoder.encode(registrationDTO.getPassword()));
+        employer.setPassword(passwordEncoder.encode(registrationDTO.getPassword()));
 
         Role employerRole = roleRepository.findByType(RoleType.EMPLOYER);
         if (employerRole != null) {
@@ -216,6 +215,7 @@ public class UserService {
         }
         return false;
     }
+
     @Transactional(readOnly = true)
     public List<User> getAllUsers() {
         return userRepository.findAll();
@@ -235,4 +235,3 @@ public class UserService {
         return Optional.ofNullable(userRepository.findByEmail(email));
     }
 }
-

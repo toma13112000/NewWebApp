@@ -23,14 +23,12 @@ CREATE TABLE users (
                        id BIGINT AUTO_INCREMENT PRIMARY KEY,
                        username VARCHAR(191) NOT NULL,
                        email VARCHAR(191) NOT NULL,
-                       password VARCHAR(255) NOT NULL,
                        phone_number VARCHAR(20),
+                       password VARCHAR(255) NOT NULL,
                        last_login_role VARCHAR(50),
-                       photo_path VARCHAR(255),
-                       user_type VARCHAR(50) NOT NULL,
-                       UNIQUE (email, user_type),
-                       UNIQUE (phone_number, user_type)
-) ENGINE=InnoDB;
+                       UNIQUE (email),
+                       UNIQUE (phone_number)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Create roles table
 CREATE TABLE roles (
@@ -52,7 +50,6 @@ CREATE TABLE user_roles (
 CREATE TABLE recruiting_companies (
                                       id BIGINT AUTO_INCREMENT PRIMARY KEY,
                                       user_id BIGINT NOT NULL,
-                                      role_type VARCHAR(50) NOT NULL,
                                       FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
@@ -62,18 +59,7 @@ CREATE TABLE employers (
                            user_id BIGINT NOT NULL,
                            company_name VARCHAR(191),
                            company_url VARCHAR(191),
-                           role_type VARCHAR(50) NOT NULL,
                            FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-) ENGINE=InnoDB;
-
--- Create certificate_registry table
-CREATE TABLE certificate_registry (
-                                      id BIGINT AUTO_INCREMENT PRIMARY KEY,
-                                      graduate_id BIGINT NOT NULL,
-                                      certificate_number VARCHAR(191),
-                                      certificate_date DATE,
-                                      specialty VARCHAR(191),
-                                      FOREIGN KEY (graduate_id) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- Create graduates table
@@ -87,6 +73,16 @@ CREATE TABLE graduates (
                            FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
+-- Create certificate_registry table
+CREATE TABLE certificate_registry (
+                                      id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                                      graduate_id BIGINT NOT NULL,
+                                      certificate_number VARCHAR(191),
+                                      certificate_date DATE,
+                                      specialty VARCHAR(191),
+                                      FOREIGN KEY (graduate_id) REFERENCES graduates(id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
 -- Create portfolio_file table
 CREATE TABLE portfolio_file (
                                 id BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -94,7 +90,7 @@ CREATE TABLE portfolio_file (
                                 file_name VARCHAR(255),
                                 file_extension VARCHAR(10),
                                 graduate_id BIGINT NOT NULL,
-                                FOREIGN KEY (graduate_id) REFERENCES users(id) ON DELETE CASCADE
+                                FOREIGN KEY (graduate_id) REFERENCES graduates(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- Create advertisements table
@@ -109,15 +105,18 @@ CREATE TABLE advertisements (
                                 type VARCHAR(50),
                                 salary INTEGER,
                                 employer_id BIGINT,
-                                FOREIGN KEY (employer_id) REFERENCES users(id) ON DELETE CASCADE
+                                recruiting_company_id BIGINT,
+                                FOREIGN KEY (employer_id) REFERENCES employers(id) ON DELETE CASCADE,
+                                FOREIGN KEY (recruiting_company_id) REFERENCES recruiting_companies(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
+
 
 -- Create company_activities table
 CREATE TABLE company_activities (
                                     id BIGINT AUTO_INCREMENT PRIMARY KEY,
                                     employer_id BIGINT NOT NULL,
                                     activity TEXT,
-                                    FOREIGN KEY (employer_id) REFERENCES users(id) ON DELETE CASCADE
+                                    FOREIGN KEY (employer_id) REFERENCES employers(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- Create graduate_job_types table
@@ -125,7 +124,7 @@ CREATE TABLE graduate_job_types (
                                     id BIGINT AUTO_INCREMENT PRIMARY KEY,
                                     graduate_id BIGINT NOT NULL,
                                     job_type VARCHAR(191),
-                                    FOREIGN KEY (graduate_id) REFERENCES users(id) ON DELETE CASCADE
+                                    FOREIGN KEY (graduate_id) REFERENCES graduates(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- Create graduate_employment_statuses table
@@ -133,5 +132,11 @@ CREATE TABLE graduate_employment_statuses (
                                               id BIGINT AUTO_INCREMENT PRIMARY KEY,
                                               graduate_id BIGINT NOT NULL,
                                               employment_status VARCHAR(191),
-                                              FOREIGN KEY (graduate_id) REFERENCES users(id) ON DELETE CASCADE
+                                              FOREIGN KEY (graduate_id) REFERENCES graduates(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
+
+-- Inserting roles into the roles table
+INSERT INTO roles (name, type) VALUES ('GRADUATE', 'GRADUATE');
+INSERT INTO roles (name, type) VALUES ('RECRUITING_COMPANY', 'RECRUITING_COMPANY');
+INSERT INTO roles (name, type) VALUES ('EMPLOYER', 'EMPLOYER');
+INSERT INTO roles (name, type) VALUES ('ADMINISTRATOR', 'ADMINISTRATOR');

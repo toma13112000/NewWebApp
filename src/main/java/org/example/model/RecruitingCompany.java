@@ -6,6 +6,7 @@ import lombok.ToString;
 import org.example.enumerate.RoleType;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @DiscriminatorValue("RECRUITING_COMPANY")
@@ -14,9 +15,8 @@ import javax.persistence.*;
 @ToString(callSuper = true)
 public class RecruitingCompany extends User {
 
-    @Enumerated(EnumType.STRING)
-    @Column(length = 50)
-    private RoleType roleType;
+    @OneToMany(mappedBy = "recruitingCompany", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Advertisement> advertisements;
 
     // Других полей нет, так как все унаследованы от User
 }

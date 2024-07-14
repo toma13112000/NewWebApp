@@ -19,4 +19,8 @@ public class RoleService {
     public Role findByType(RoleType type) {
         return roleRepository.findByType(type);
     }
+
+    public Role save(Role role) {
+        return roleRepository.save(role);
+    }
 }
