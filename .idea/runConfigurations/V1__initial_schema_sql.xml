@@ -1,0 +1,8 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="V1__initial_schema.sql" type="DatabaseScript" editBeforeRun="true" focusToolWindowBeforeRun="true" singleton="false" nameIsGenerated="true">
+    <script-file value="$PROJECT_DIR$/src/main/resources/db/V1__initial_schema.sql" />
+    <script-mode>FILE</script-mode>
+    <data-source id="c6383fe9-954b-4942-99ab-b4aa83febad9" namespace="schema/&quot;jumystap&quot;" />
+    <method v="2" />
+  </configuration>
+</component>

@@ -2,6 +2,8 @@ package org.example.controller;
 
 import org.example.DTO.RecruitingCompanyRegistrationDTO;
 import org.example.enumerate.RoleType;
+import org.example.exception.EmailAlreadyExistsForRoleException;
+import org.example.exception.PhoneNumberAlreadyExistsForRoleException;
 import org.example.model.Role;
 import org.example.model.User;
 import org.example.service.RecruitingCompanyService;
@@ -52,29 +54,23 @@ public class RecruitingCompanyController {
         String cleanedPhoneNumber = PhoneNumberUtils.formatPhoneNumber(registrationDTO.getPhoneNumber());
         logger.info("Cleaned phone number: {}", cleanedPhoneNumber);
 
-        boolean phoneExists = recruitingCompanyService.existsByPhoneNumberAndRole(cleanedPhoneNumber, RoleType.RECRUITING_COMPANY);
-        boolean emailExists = recruitingCompanyService.existsByEmailAndRole(registrationDTO.getEmail(), RoleType.RECRUITING_COMPANY);
-        logger.info("Phone exists: {}", phoneExists);
-        logger.info("Email exists: {}", emailExists);
-
-        if (emailExists) {
-            logger.error("Email already exists for this role");
-            return ResponseEntity.badRequest().body("Email already exists for this role");
-        } else if (phoneExists) {
-            logger.error("Phone number already exists for this role");
-            return ResponseEntity.badRequest().body("Phone number already exists for this role");
-        }
-
         try {
             registrationDTO.setPhoneNumber(cleanedPhoneNumber);
-            recruitingCompanyService.registerWithRole(registrationDTO, RoleType.RECRUITING_COMPANY);
+            recruitingCompanyService.registerRecruitingCompany(registrationDTO);
             logger.info("User registered successfully");
             return ResponseEntity.ok("User registered successfully");
+        } catch (EmailAlreadyExistsForRoleException e) {
+            logger.error("Email already exists for this role", e);
+            return ResponseEntity.badRequest().body("Email already exists for this role");
+        } catch (PhoneNumberAlreadyExistsForRoleException e) {
+            logger.error("Phone number already exists for this role", e);
+            return ResponseEntity.badRequest().body("Phone number already exists for this role");
         } catch (Exception e) {
             logger.error("Error while registering user", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while registering the user");
         }
     }
+
     @GetMapping("/check-user")
     public ResponseEntity<?> checkUser(@RequestParam String phoneNumber, @RequestParam String email) {
         try {
@@ -90,4 +86,5 @@ public class RecruitingCompanyController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("success", false, "message", "An error occurred"));
         }
     }
+
 }

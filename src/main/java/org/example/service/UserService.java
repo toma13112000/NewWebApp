@@ -104,7 +104,7 @@ public class UserService {
         recruitingCompany.setEmail(registrationDTO.getEmail());
         recruitingCompany.setPhoneNumber(registrationDTO.getPhoneNumber().replaceAll("\\D", ""));
         recruitingCompany.setPassword(passwordEncoder.encode(registrationDTO.getPassword()));
-        recruitingCompany.setRoleType(String.valueOf(RoleType.RECRUITING_COMPANY)); // This will call addRole internally
+        recruitingCompany.setRoleType(RoleType.RECRUITING_COMPANY);
 
         return recruitingCompanyRepository.save(recruitingCompany);
     }
@@ -193,10 +193,10 @@ public class UserService {
         }
 
         employer.setPhoneNumber(registrationDTO.getPhoneNumber());
-        employer.setRoleType(registrationDTO.getRoleType());
+        employer.setRoleType(RoleType.EMPLOYER);
         employer.setCompanyName(registrationDTO.getCompanyName());
         employer.setCompanyUrl(registrationDTO.getCompanyUrl());
-        employer.setCompanyActivities(registrationDTO.getCompanyActivities());
+        employer.setCompanyActivity(registrationDTO.getCompanyActivity());
 
         employerRepository.save(employer);
         return employer;

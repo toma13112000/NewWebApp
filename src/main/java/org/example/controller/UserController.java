@@ -188,7 +188,7 @@ public class UserController {
                 Employer employer = (Employer) user;
                 response.put("companyName", employer.getCompanyName());
                 response.put("companyUrl", employer.getCompanyUrl());
-                response.put("companyActivities", employer.getCompanyActivities());
+                response.put("companyActivity", employer.getCompanyActivity());
             }
 
             return ResponseEntity.ok(response);

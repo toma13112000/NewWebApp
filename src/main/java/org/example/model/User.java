@@ -32,8 +32,9 @@ public class User implements UserDetails {
     @Column(nullable = false, unique = true, length = 191)
     private String username;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "role_type")
-    private String roleType;
+    private RoleType roleType;
 
     @Column(nullable = false, unique = true, length = 191)
     private String email;
@@ -58,6 +59,7 @@ public class User implements UserDetails {
     // Methods to manage roles
     public void addRole(Role role) {
         this.roles.add(role);
+        role.getUsers().add(this);
     }
 
     public void removeRole(Role role) {

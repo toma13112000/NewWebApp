@@ -21,13 +21,11 @@ public class Employer extends User {
     @Column(length = 191)
     private String companyUrl;
 
-    @ElementCollection
-    @CollectionTable(name = "company_activities", joinColumns = @JoinColumn(name = "employer_id"))
-    @Column(name = "activity", columnDefinition = "TEXT")
-    private List<String> companyActivities;
+    @Column(name = "company_activity", columnDefinition = "TEXT")
+    private String companyActivity;
 
     @Enumerated(EnumType.STRING)
-    @Column(length = 50)
+    @Column(name = "role_type")
     private RoleType roleType;
 
     @OneToMany(mappedBy = "employer", cascade = CascadeType.ALL, orphanRemoval = true)

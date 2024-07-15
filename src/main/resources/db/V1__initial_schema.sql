@@ -26,8 +26,14 @@ CREATE TABLE users (
                        phone_number VARCHAR(20),
                        password VARCHAR(255) NOT NULL,
                        last_login_role VARCHAR(50),
-                       UNIQUE (email),
-                       UNIQUE (phone_number)
+                       role_type VARCHAR(50),
+                       company_activity TEXT,
+                       company_name VARCHAR(191),
+                       company_url VARCHAR(191),
+                       birth_date DATE,
+                       rating INTEGER,
+                       photo LONGBLOB,
+                       photo_extension VARCHAR(10)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Create roles table
@@ -50,6 +56,8 @@ CREATE TABLE user_roles (
 CREATE TABLE recruiting_companies (
                                       id BIGINT AUTO_INCREMENT PRIMARY KEY,
                                       user_id BIGINT NOT NULL,
+                                      email VARCHAR(191) NOT NULL UNIQUE,
+                                      phone_number VARCHAR(20) UNIQUE,
                                       FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
@@ -57,8 +65,11 @@ CREATE TABLE recruiting_companies (
 CREATE TABLE employers (
                            id BIGINT AUTO_INCREMENT PRIMARY KEY,
                            user_id BIGINT NOT NULL,
+                           email VARCHAR(191) NOT NULL UNIQUE,
+                           phone_number VARCHAR(20) UNIQUE,
                            company_name VARCHAR(191),
                            company_url VARCHAR(191),
+                           company_activity TEXT,
                            FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
@@ -66,6 +77,8 @@ CREATE TABLE employers (
 CREATE TABLE graduates (
                            id BIGINT AUTO_INCREMENT PRIMARY KEY,
                            user_id BIGINT NOT NULL,
+                           email VARCHAR(191) NOT NULL UNIQUE,
+                           phone_number VARCHAR(20) UNIQUE,
                            birth_date DATE,
                            rating INTEGER,
                            photo LONGBLOB,
@@ -110,7 +123,6 @@ CREATE TABLE advertisements (
                                 FOREIGN KEY (recruiting_company_id) REFERENCES recruiting_companies(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
-
 -- Create company_activities table
 CREATE TABLE company_activities (
                                     id BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -140,3 +152,32 @@ INSERT INTO roles (name, type) VALUES ('GRADUATE', 'GRADUATE');
 INSERT INTO roles (name, type) VALUES ('RECRUITING_COMPANY', 'RECRUITING_COMPANY');
 INSERT INTO roles (name, type) VALUES ('EMPLOYER', 'EMPLOYER');
 INSERT INTO roles (name, type) VALUES ('ADMINISTRATOR', 'ADMINISTRATOR');
+
+-- Trigger to insert into employers table when a user with role_type = 'EMPLOYER' is inserted
+DELIMITER //
+
+CREATE TRIGGER insert_into_employers_after_insert_user
+    AFTER INSERT ON users
+    FOR EACH ROW
+BEGIN
+    IF NEW.role_type = 'EMPLOYER' THEN
+        INSERT INTO employers (user_id, email, phone_number, company_name, company_url, company_activity)
+        VALUES (NEW.id, NEW.email, NEW.phone_number, NEW.company_name, NEW.company_url, NEW.company_activity);
+    END IF;
+END //
+
+DELIMITER ;
+-- Trigger to insert into recruiting_companies table when a user with role_type = 'RECRUITING_COMPANY' is inserted
+DELIMITER //
+
+CREATE TRIGGER insert_into_recruiting_companies_after_insert_user
+    AFTER INSERT ON users
+    FOR EACH ROW
+BEGIN
+    IF NEW.role_type = 'RECRUITING_COMPANY' THEN
+        INSERT INTO recruiting_companies (user_id, email, phone_number)
+        VALUES (NEW.id, NEW.email, NEW.phone_number);
+    END IF;
+END //
+
+DELIMITER ;

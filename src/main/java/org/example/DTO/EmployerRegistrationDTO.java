@@ -9,28 +9,29 @@ import java.util.List;
 
 public class EmployerRegistrationDTO {
 
-    @NotEmpty(message = "Username is required")
+    @NotEmpty(message = "Имя пользователя обязательно")
     private String username;
 
-    @Email(message = "Invalid email format")
-    @NotEmpty(message = "Email is required")
+    @Email(message = "Неверный формат электронной почты")
+    @NotEmpty(message = "Электронная почта обязательна")
     private String email;
 
-    @NotEmpty(message = "Phone number is required")
-    @Pattern(regexp = "^\\+7[0-9]{10}$", message = "Phone number must start with +7 and contain 10 digits")
+    @NotEmpty(message = "Номер телефона обязателен")
+    @Pattern(regexp = "^\\+7\\s?\\(\\d{3}\\)\\s?\\d{3}-\\d{2}-\\d{2}$", message = "Неверный формат номера телефона")
     private String phoneNumber;
 
-    @NotEmpty(message = "Password is required")
+    @NotEmpty(message = "Пароль обязателен")
     private String password;
 
-    @NotEmpty(message = "Role type is required")
-    private RoleType roleType;
+    @NotEmpty(message = "Повторите пароль")
+    private String password2;
+
+    private RoleType roleType = RoleType.EMPLOYER;
 
     private String companyName;
     private String companyUrl;
-    private List<String> companyActivities;
+    private String companyActivity;
 
-    // Getters and setters
     public String getUsername() {
         return username;
     }
@@ -47,13 +48,28 @@ public class EmployerRegistrationDTO {
         this.email = email;
     }
 
-
     public String getPhoneNumber() {
         return phoneNumber;
     }
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getPassword2() {
+        return password2;
+    }
+
+    public void setPassword2(String password2) {
+        this.password2 = password2;
     }
 
     public RoleType getRoleType() {
@@ -80,19 +96,11 @@ public class EmployerRegistrationDTO {
         this.companyUrl = companyUrl;
     }
 
-    public List<String> getCompanyActivities() {
-        return companyActivities;
+    public String getCompanyActivity() {
+        return companyActivity;
     }
 
-    public void setCompanyActivities(List<String> companyActivities) {
-        this.companyActivities = companyActivities;
+    public void setCompanyActivity(String companyActivity) {
+        this.companyActivity = companyActivity;
     }
-
-    public String getPassword() {
-        return password;
     }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-}
