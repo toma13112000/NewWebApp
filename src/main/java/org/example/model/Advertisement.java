@@ -1,8 +1,11 @@
 package org.example.model;
 
+import lombok.Data;
+
 import javax.persistence.*;
 
 @Entity
+@Data
 public class Advertisement {
 
     @Id
@@ -25,6 +28,7 @@ public class Advertisement {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "recruiting_company_id")
     private RecruitingCompany recruitingCompany;
+
     // Конструкторы
     public Advertisement() {}
 
@@ -37,94 +41,5 @@ public class Advertisement {
         this.description = description;
         this.type = type;
         this.salary = salary;
-    }
-
-    // Геттеры и сеттеры
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getWorkSchedule() {
-        return workSchedule;
-    }
-
-    public void setWorkSchedule(String workSchedule) {
-        this.workSchedule = workSchedule;
-    }
-
-    public String getAgeRange() {
-        return ageRange;
-    }
-
-    public void setAgeRange(String ageRange) {
-        this.ageRange = ageRange;
-    }
-
-    public String getRequirements() {
-        return requirements;
-    }
-
-    public void setRequirements(String requirements) {
-        this.requirements = requirements;
-    }
-
-    public String getConditions() {
-        return conditions;
-    }
-
-    public void setConditions(String conditions) {
-        this.conditions = conditions;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public int getSalary() {
-        return salary;
-    }
-
-    public void setSalary(int salary) {
-        this.salary = salary;
-    }
-
-    public Employer getEmployer() {
-        return employer;
-    }
-
-    public void setEmployer(Employer employer) {
-        this.employer = employer;
-    }
-
-    public RecruitingCompany getRecruitingCompany() {
-        return recruitingCompany;
-    }
-
-    public void setRecruitingCompany(RecruitingCompany recruitingCompany) {
-        this.recruitingCompany = recruitingCompany;
     }
 }

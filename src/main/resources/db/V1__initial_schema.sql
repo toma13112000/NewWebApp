@@ -4,21 +4,29 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- Drop all tables if they exist
 DROP TABLE IF EXISTS user_roles;
 DROP TABLE IF EXISTS roles;
-DROP TABLE IF EXISTS recruiting_companies;
-DROP TABLE IF EXISTS employers;
 DROP TABLE IF EXISTS certificate_registry;
-DROP TABLE IF EXISTS graduates;
 DROP TABLE IF EXISTS portfolio_file;
 DROP TABLE IF EXISTS advertisements;
-DROP TABLE IF EXISTS company_activities;
-DROP TABLE IF EXISTS graduate_job_types;
-DROP TABLE IF EXISTS graduate_employment_statuses;
+DROP TABLE IF EXISTS graduate;
+DROP TABLE IF EXISTS employer;
+DROP TABLE IF EXISTS recruiting_company;
 DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS advertisement;
+DROP TABLE IF EXISTS advertisements;
+DROP TABLE IF EXISTS certificate_registry_specialties;
+DROP TABLE IF EXISTS company_activities;
+DROP TABLE IF EXISTS employers;
+DROP TABLE IF EXISTS graduate_employment_statuses;
+DROP TABLE IF EXISTS graduate_job_types;
+DROP TABLE IF EXISTS graduates;
+DROP TABLE IF EXISTS recruiting_companies;
+DROP TABLE IF EXISTS specialties;
+
 
 -- Re-enable foreign key checks
 SET FOREIGN_KEY_CHECKS = 1;
 
--- Create users table
+-- Create users table (superclass)
 CREATE TABLE users (
                        id BIGINT AUTO_INCREMENT PRIMARY KEY,
                        username VARCHAR(191) NOT NULL,
@@ -26,14 +34,33 @@ CREATE TABLE users (
                        phone_number VARCHAR(20),
                        password VARCHAR(255) NOT NULL,
                        last_login_role VARCHAR(50),
-                       role_type VARCHAR(50),
-                       company_activity TEXT,
-                       company_name VARCHAR(191),
-                       company_url VARCHAR(191),
-                       birth_date DATE,
-                       rating INTEGER,
-                       photo LONGBLOB,
-                       photo_extension VARCHAR(10)
+                       role_type VARCHAR(50)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Create graduate table (subclass)
+CREATE TABLE graduate (
+                          id BIGINT PRIMARY KEY,
+                          birth_date DATE,
+                          rating DOUBLE,
+                          photo_file VARCHAR(255) NOT NULL,
+                          job_type VARCHAR(191),
+                          employment_status VARCHAR(191),
+                          FOREIGN KEY (id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Create employer table (subclass)
+CREATE TABLE employer (
+                          id BIGINT PRIMARY KEY,
+                          company_name VARCHAR(191),
+                          company_url VARCHAR(191),
+                          company_activity TEXT,
+                          FOREIGN KEY (id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Create recruiting_company table (subclass)
+CREATE TABLE recruiting_company (
+                                    id BIGINT PRIMARY KEY,
+                                    FOREIGN KEY (id) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Create roles table
@@ -52,40 +79,6 @@ CREATE TABLE user_roles (
                             FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
--- Create recruiting_companies table
-CREATE TABLE recruiting_companies (
-                                      id BIGINT AUTO_INCREMENT PRIMARY KEY,
-                                      user_id BIGINT NOT NULL,
-                                      email VARCHAR(191) NOT NULL UNIQUE,
-                                      phone_number VARCHAR(20) UNIQUE,
-                                      FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-) ENGINE=InnoDB;
-
--- Create employers table
-CREATE TABLE employers (
-                           id BIGINT AUTO_INCREMENT PRIMARY KEY,
-                           user_id BIGINT NOT NULL,
-                           email VARCHAR(191) NOT NULL UNIQUE,
-                           phone_number VARCHAR(20) UNIQUE,
-                           company_name VARCHAR(191),
-                           company_url VARCHAR(191),
-                           company_activity TEXT,
-                           FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-) ENGINE=InnoDB;
-
--- Create graduates table
-CREATE TABLE graduates (
-                           id BIGINT AUTO_INCREMENT PRIMARY KEY,
-                           user_id BIGINT NOT NULL,
-                           email VARCHAR(191) NOT NULL UNIQUE,
-                           phone_number VARCHAR(20) UNIQUE,
-                           birth_date DATE,
-                           rating INTEGER,
-                           photo LONGBLOB,
-                           photo_extension VARCHAR(10),
-                           FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-) ENGINE=InnoDB;
-
 -- Create certificate_registry table
 CREATE TABLE certificate_registry (
                                       id BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -93,17 +86,16 @@ CREATE TABLE certificate_registry (
                                       certificate_number VARCHAR(191),
                                       certificate_date DATE,
                                       specialty VARCHAR(191),
-                                      FOREIGN KEY (graduate_id) REFERENCES graduates(id) ON DELETE CASCADE
+                                      FOREIGN KEY (graduate_id) REFERENCES graduate(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- Create portfolio_file table
 CREATE TABLE portfolio_file (
                                 id BIGINT AUTO_INCREMENT PRIMARY KEY,
-                                file_data LONGBLOB,
-                                file_name VARCHAR(255),
-                                file_extension VARCHAR(10),
+                                file_path VARCHAR(255) NOT NULL,
+                                file_name VARCHAR(255) NOT NULL,
                                 graduate_id BIGINT NOT NULL,
-                                FOREIGN KEY (graduate_id) REFERENCES graduates(id) ON DELETE CASCADE
+                                FOREIGN KEY (graduate_id) REFERENCES graduate(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- Create advertisements table
@@ -119,32 +111,8 @@ CREATE TABLE advertisements (
                                 salary INTEGER,
                                 employer_id BIGINT,
                                 recruiting_company_id BIGINT,
-                                FOREIGN KEY (employer_id) REFERENCES employers(id) ON DELETE CASCADE,
-                                FOREIGN KEY (recruiting_company_id) REFERENCES recruiting_companies(id) ON DELETE CASCADE
-) ENGINE=InnoDB;
-
--- Create company_activities table
-CREATE TABLE company_activities (
-                                    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-                                    employer_id BIGINT NOT NULL,
-                                    activity TEXT,
-                                    FOREIGN KEY (employer_id) REFERENCES employers(id) ON DELETE CASCADE
-) ENGINE=InnoDB;
-
--- Create graduate_job_types table
-CREATE TABLE graduate_job_types (
-                                    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-                                    graduate_id BIGINT NOT NULL,
-                                    job_type VARCHAR(191),
-                                    FOREIGN KEY (graduate_id) REFERENCES graduates(id) ON DELETE CASCADE
-) ENGINE=InnoDB;
-
--- Create graduate_employment_statuses table
-CREATE TABLE graduate_employment_statuses (
-                                              id BIGINT AUTO_INCREMENT PRIMARY KEY,
-                                              graduate_id BIGINT NOT NULL,
-                                              employment_status VARCHAR(191),
-                                              FOREIGN KEY (graduate_id) REFERENCES graduates(id) ON DELETE CASCADE
+                                FOREIGN KEY (employer_id) REFERENCES employer(id) ON DELETE CASCADE,
+                                FOREIGN KEY (recruiting_company_id) REFERENCES recruiting_company(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- Inserting roles into the roles table
@@ -152,32 +120,3 @@ INSERT INTO roles (name, type) VALUES ('GRADUATE', 'GRADUATE');
 INSERT INTO roles (name, type) VALUES ('RECRUITING_COMPANY', 'RECRUITING_COMPANY');
 INSERT INTO roles (name, type) VALUES ('EMPLOYER', 'EMPLOYER');
 INSERT INTO roles (name, type) VALUES ('ADMINISTRATOR', 'ADMINISTRATOR');
-
--- Trigger to insert into employers table when a user with role_type = 'EMPLOYER' is inserted
-DELIMITER //
-
-CREATE TRIGGER insert_into_employers_after_insert_user
-    AFTER INSERT ON users
-    FOR EACH ROW
-BEGIN
-    IF NEW.role_type = 'EMPLOYER' THEN
-        INSERT INTO employers (user_id, email, phone_number, company_name, company_url, company_activity)
-        VALUES (NEW.id, NEW.email, NEW.phone_number, NEW.company_name, NEW.company_url, NEW.company_activity);
-    END IF;
-END //
-
-DELIMITER ;
--- Trigger to insert into recruiting_companies table when a user with role_type = 'RECRUITING_COMPANY' is inserted
-DELIMITER //
-
-CREATE TRIGGER insert_into_recruiting_companies_after_insert_user
-    AFTER INSERT ON users
-    FOR EACH ROW
-BEGIN
-    IF NEW.role_type = 'RECRUITING_COMPANY' THEN
-        INSERT INTO recruiting_companies (user_id, email, phone_number)
-        VALUES (NEW.id, NEW.email, NEW.phone_number);
-    END IF;
-END //
-
-DELIMITER ;

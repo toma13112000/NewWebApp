@@ -10,66 +10,58 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.UUID;
 
 @Service
 public class FileStorageService {
 
-    private final Path fileStorageLocation;
+    @Value("${file.upload-dir}")
+    private String fileUploadDir;
 
-    public FileStorageService(@Value("${file.upload-dir}") String uploadDir) {
-        this.fileStorageLocation = Paths.get(uploadDir).toAbsolutePath().normalize();
-        try {
-            Files.createDirectories(this.fileStorageLocation);
-        } catch (Exception ex) {
-            throw new RuntimeException("Could not create the directory where the uploaded files will be stored.", ex);
-        }
+    private final String photoStorageSubDirectory = "profile-photos/";
+    private final String portfolioStorageSubDirectory = "portfolio-files/";
+
+    private Path getStoragePath(String subDirectory) {
+        return Paths.get(fileUploadDir, subDirectory).toAbsolutePath().normalize();
     }
 
-    public String storeFile(MultipartFile file, String fileName) {
+    public String saveFile(MultipartFile file, String subDirectory) throws IOException {
         String originalFileName = StringUtils.cleanPath(file.getOriginalFilename());
-        String fileExtension = getFileExtension(originalFileName);
-        String storedFileName = fileName + fileExtension;
-        try {
-            Path targetLocation = this.fileStorageLocation.resolve(storedFileName);
-            Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
-            return storedFileName;
-        } catch (IOException ex) {
-            throw new RuntimeException("Could not store file " + storedFileName + ". Please try again!", ex);
+        Path directoryPath = getStoragePath(subDirectory);
+        Path filePath = directoryPath.resolve(originalFileName).normalize();
+
+        // Создаем директорию, если она не существует
+        if (!Files.exists(directoryPath)) {
+            Files.createDirectories(directoryPath);
         }
+
+        Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+        return filePath.toString();
     }
 
-    public byte[] getFileBytes(String fileName) {
-        Path filePath = this.fileStorageLocation.resolve(fileName).normalize();
-        try {
-            return Files.readAllBytes(filePath);
-        } catch (IOException ex) {
-            throw new RuntimeException("Could not read file " + fileName, ex);
-        }
+    public String savePhoto(MultipartFile file) throws IOException {
+        return saveFile(file, photoStorageSubDirectory);
     }
 
-    public void deleteFile(String fileName) {
-        Path filePath = this.fileStorageLocation.resolve(fileName).normalize();
-        try {
-            Files.delete(filePath);
-        } catch (IOException ex) {
-            throw new RuntimeException("Could not delete file " + fileName, ex);
-        }
+    public String savePortfolioFile(MultipartFile file) throws IOException {
+        return saveFile(file, portfolioStorageSubDirectory);
     }
 
-    public String getFileExtension(String fileName) {
-        int dotIndex = fileName.lastIndexOf('.');
-        if (dotIndex > 0) {
-            return fileName.substring(dotIndex);
-        }
-        return "";
+    public void deleteFile(String filePath) throws IOException {
+        Path path = Paths.get(filePath);
+        Files.deleteIfExists(path);
     }
 
-    public String getFileNameWithoutExtension(String fileName) {
-        int dotIndex = fileName.lastIndexOf('.');
-        if (dotIndex > 0) {
-            return fileName.substring(0, dotIndex);
-        }
-        return fileName;
+    public String updateFile(String existingFilePath, MultipartFile newFile, String subDirectory) throws IOException {
+        deleteFile(existingFilePath);
+        return saveFile(newFile, subDirectory);
+    }
+
+    public String updatePhoto(String existingFilePath, MultipartFile newFile) throws IOException {
+        return updateFile(existingFilePath, newFile, photoStorageSubDirectory);
+    }
+
+    public String updatePortfolioFile(String existingFilePath, MultipartFile newFile) throws IOException {
+        return updateFile(existingFilePath, newFile, portfolioStorageSubDirectory);
     }
 }

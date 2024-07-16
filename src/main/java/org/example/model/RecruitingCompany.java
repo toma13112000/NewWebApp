@@ -6,6 +6,7 @@ import lombok.ToString;
 import org.example.enumerate.RoleType;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -14,9 +15,12 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class RecruitingCompany extends User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id; // Уникальный идентификатор рекрутинговой компании
 
     @OneToMany(mappedBy = "recruitingCompany", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Advertisement> advertisements;
+    private List<Advertisement> advertisements = new ArrayList<>();
 
     // Других полей нет, так как все унаследованы от User
 }

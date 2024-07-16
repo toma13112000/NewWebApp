@@ -45,7 +45,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors().and()
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/", "/login", "/index", "/reset/**", "/terms/**", "/terms","/profile-photos/**", "/images/**", "/api/auth/**", "/api/login", "/api/test", "/register", "/register/**", "/confirm/**", "/change-password/**", "/api/recruiting/**","/api/employer/**").permitAll()
+                .antMatchers("/", "/login", "/index", "/reset/**", "/terms/**", "/terms","/profile-photos/**", "/images/**", "/api/auth/**", "/api/login", "/api/test", "/register", "/register/**", "/confirm/**", "/change-password/**", "/api/recruiting/**","/api/employer/**","/api/graduate/**").permitAll()
                 .antMatchers("/api/users/employees", "/api/users/*").permitAll()
                 .antMatchers("/profile/**").permitAll()
                 .antMatchers("/api/users/graduates").hasAnyRole("EMPLOYER", "RECRUITING_COMPANY")

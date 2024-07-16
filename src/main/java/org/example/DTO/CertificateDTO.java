@@ -1,43 +1,19 @@
 package org.example.DTO;
 
+import lombok.Data;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Past;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
+@Data
 public class CertificateDTO {
 
-    @NotEmpty(message = "Certificate number is required")
-    private String certificateNumber;
-
-    @Past(message = "Certificate date must be in the past")
+    @NotNull(message = "Дата сертификата обязательна")
     private LocalDate certificateDate;
 
-    @NotEmpty(message = "Specialty is required")
+    @NotEmpty(message = "Номер сертификата обязателен")
+    private String certificateNumber;
+
+    @NotEmpty(message = "Специальность обязательна")
     private String specialty;
-
-    // Геттеры и сеттеры
-
-    public String getCertificateNumber() {
-        return certificateNumber;
-    }
-
-    public void setCertificateNumber(String certificateNumber) {
-        this.certificateNumber = certificateNumber;
-    }
-
-    public LocalDate getCertificateDate() {
-        return certificateDate;
-    }
-
-    public void setCertificateDate(LocalDate certificateDate) {
-        this.certificateDate = certificateDate;
-    }
-
-    public String getSpecialty() {
-        return specialty;
-    }
-
-    public void setSpecialty(String specialty) {
-        this.specialty = specialty;
-    }
 }

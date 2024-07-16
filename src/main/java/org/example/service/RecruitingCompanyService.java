@@ -4,8 +4,11 @@ import org.example.DTO.RecruitingCompanyRegistrationDTO;
 import org.example.enumerate.RoleType;
 import org.example.exception.EmailAlreadyExistsForRoleException;
 import org.example.exception.PhoneNumberAlreadyExistsForRoleException;
+import org.example.model.Employer;
+import org.example.model.RecruitingCompany;
 import org.example.model.Role;
 import org.example.model.User;
+import org.example.repository.RecruitingCompanyRepository;
 import org.example.repository.UserRepository;
 import org.example.util.PhoneNumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,28 +29,31 @@ public class RecruitingCompanyService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private RecruitingCompanyRepository recruitingCompanyRepository;
 
     @Transactional
     public void registerRecruitingCompany(RecruitingCompanyRegistrationDTO registrationDTO) {
         Role role = roleService.findByType(RoleType.RECRUITING_COMPANY);
         String formattedPhoneNumber = PhoneNumberUtils.formatPhoneNumber(registrationDTO.getPhoneNumber());
 
-        if (existsByEmailAndRole(registrationDTO.getEmail(), RoleType.EMPLOYER)) {
+        if (existsByEmailAndRole(registrationDTO.getEmail(), RoleType.RECRUITING_COMPANY)) {
             throw new EmailAlreadyExistsForRoleException("Email already exists for this role");
         }
 
-        if (existsByPhoneNumberAndRole(formattedPhoneNumber, RoleType.EMPLOYER)) {
+        if (existsByPhoneNumberAndRole(formattedPhoneNumber, RoleType.RECRUITING_COMPANY)) {
             throw new PhoneNumberAlreadyExistsForRoleException("Phone number already exists for this role");
         }
 
-        User newUser = new User();
-        newUser.setUsername(registrationDTO.getUsername());
-        newUser.setEmail(registrationDTO.getEmail());
-        newUser.setPhoneNumber(PhoneNumberUtils.formatPhoneNumber(registrationDTO.getPhoneNumber()));
-        newUser.setPassword(passwordEncoder.encode(registrationDTO.getPassword()));
-        newUser.addRole(role);
+        RecruitingCompany newRecruitingCompany = new RecruitingCompany();
+        newRecruitingCompany.setUsername(registrationDTO.getUsername());
+        newRecruitingCompany.setEmail(registrationDTO.getEmail());
+        newRecruitingCompany.setPhoneNumber(formattedPhoneNumber);
+        newRecruitingCompany.setPassword(passwordEncoder.encode(registrationDTO.getPassword()));
+        newRecruitingCompany.addRole(role);
+        newRecruitingCompany.setRoleType(RECRUITING_COMPANY); // Setting role_type
 
-        userRepository.save(newUser);
+        recruitingCompanyRepository.save(newRecruitingCompany);
     }
 
 

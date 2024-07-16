@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
         @Index(name = "idx_username", columnList = "username")
 })
 @Data
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@Inheritance(strategy = InheritanceType.JOINED)
 @EqualsAndHashCode(of = {"username", "email"}, callSuper = false)
 @ToString(of = {"id", "username", "email"})
 public class User implements UserDetails {

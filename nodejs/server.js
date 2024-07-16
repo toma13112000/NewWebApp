@@ -43,7 +43,7 @@ const upload = multer({ storage });
 // Маршрут для обработки POST-запроса на /submit-form
 app.post('/submit-form', upload.single('photo'), (req, res) => {
     const { name, phone, email, password, type } = req.body;
-    const photoPath = req.file ? req.file.path : null;
+    const photoFile = req.file ? req.file.path : null;
 
     if (!name || !phone || !email || !password) {
         return res.status(400).send('Все поля обязательны для заполнения');
@@ -72,7 +72,7 @@ app.post('/submit-form', upload.single('photo'), (req, res) => {
                 email,
                 password: hash,
                 user_type: type,
-                photo_path: photoPath
+                photo_file: phothFile
             };
 
             const insertUserQuery = 'INSERT INTO users SET ?';

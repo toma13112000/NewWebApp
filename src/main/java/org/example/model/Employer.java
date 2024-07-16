@@ -6,6 +6,7 @@ import lombok.ToString;
 import org.example.enumerate.RoleType;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -14,6 +15,9 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class Employer extends User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id; // Уникальный идентификатор работодателя
 
     @Column(length = 191)
     private String companyName;
@@ -29,5 +33,5 @@ public class Employer extends User {
     private RoleType roleType;
 
     @OneToMany(mappedBy = "employer", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Advertisement> advertisements;
+    private List<Advertisement> advertisements = new ArrayList<>();
 }

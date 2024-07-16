@@ -44,15 +44,15 @@ public class ProfilePageController {
             LOGGER.info("User fetched: " + user);
             model.addAttribute("user", user);
 
-            // Using the photoPath field to display the photo path
-            String profilePhotoPath = determineProfilePhotoPath(user);
-            LOGGER.info("Profile photo path: " + profilePhotoPath);
-            model.addAttribute("profilePhoto", profilePhotoPath);
+            // Using the photoFile field to display the photo file
+            String profilePhotoFile = determineProfilePhotoFile(user);
+            LOGGER.info("Profile photo path: " + profilePhotoFile);
+            model.addAttribute("profilePhoto", profilePhotoFile);
 
             // Fetching rating if user is a graduate
             if (user instanceof Graduate) {
                 Graduate graduate = (Graduate) user;
-                Integer rating = userService.getRatingForGraduate(graduate.getId());
+                Double rating = userService.getRatingForGraduate(graduate.getId());
                 LOGGER.info("Rating fetched: " + rating);
                 model.addAttribute("rating", rating);
 
@@ -86,7 +86,7 @@ public class ProfilePageController {
     }
 
 
-    public String determineProfilePhotoPath(User user) {
+    public String determineProfilePhotoFile(User user) {
         String[] extensions = new String[] {"jpg", "jpeg", "png"};
 
         for (String extension : extensions) {
